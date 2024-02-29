@@ -1,35 +1,56 @@
 import streamlit as st
 import pandas as pd
-import os
-import joblib
 import tabula
+import joblib
+import tensorflow as tf
 
-@st.cache(allow_output_mutation=True)
-def load_model(model_file):
-    model = joblib.load(model_file)
-    return model
+# Define las columnas
+columnas = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
+            'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
+            'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount']
 
-def apply_models(df, clustering_fraud_detect, modelo_fraud_detect):
-   df['Cluster'] = clustering_fraud_detect.predict(df)
-   df['Fraud'] = modelo_fraud_detect.predict(df.drop(columns=['Cluster']))
-   return df
+# Carga el modelo de detección de fraude
+modelo = joblib.load('model/modelo_fraud_detect.pkl')
 
-clustering_fraud_detect = load_model('clustering_fraud_detect.pkl')
-modelo_fraud_detect = load_model('modelo_fraud_detect.pkl')
+# Crea un DataFrame vacío con las columnas definidas
+df = pd.DataFrame(columns=columnas)
 
-st.sidebar.title('Cargar archivos PDF')
-uploaded_files = st.sidebar.file_uploader('Cargar hasta 5 archivos PDF', accept_multiple_files=True)
+# Permite al usuario subir archivos PDF
+uploaded_files = st.file_uploader("Elige tus archivos PDF", type="pdf", accept_multiple_files=True)
 
-if uploaded_files:
-   for uploaded_file in uploaded_files:
-      st.subheader(f'Archivo PDF: {uploaded_file.name}')
+for uploaded_file in uploaded_files:
+    if uploaded_file is not None:
+        # Lee las tablas del archivo PDF en una lista de DataFrames
+        df_temp_list = tabula.read_pdf(uploaded_file, pages='all')
+        
+        for df_temp in df_temp_list:
+            # Comprueba si df_temp es un DataFrame
+            if isinstance(df_temp, pd.DataFrame):
+                # Asegúrate de que el DataFrame tenga las columnas correctas
+                if set(columnas).issubset(df_temp.columns):
+                    # Añade el DataFrame al DataFrame principal
+                    df = pd.concat([df, df_temp], ignore_index=True)
+                else:
+                    st.write(f"El archivo {uploaded_file.name} no tiene las columnas correctas.")
+            else:
+                st.write(f"El archivo {uploaded_file.name} no contiene ninguna tabla.")
 
-      try:
-         pdf_df = tabula.read_pdf(uploaded_file)
+# Reemplaza todas las comas (,) por puntos (.) en el DataFrame
+df = df.replace(',', '.', regex=True)
 
-         result_df = apply_models(pdf_df, clustering_fraud_detect, modelo_fraud_detect)
+# Convierte todas las columnas del DataFrame a tipo float
+df = df.astype(float)
 
-         st.write(result_df)
+# Convierte el DataFrame de pandas a un Tensor de TensorFlow
+df_tensor = tf.convert_to_tensor(df.values, dtype=tf.float32)
 
-      except Exception as e:
-         st.error(f'Error al procesar el archivo {uploaded_file.name}: {e}')
+# Aplica el modelo de detección de fraude al Tensor
+if not df.empty:
+   df['Class'] = modelo.predict(df_tensor)
+   for i in range(len(df)):
+       if df['Class'][i] == 0:
+           st.write(f"La información de {uploaded_file.name} es probablemente no fraudulenta.")
+       else:
+           st.write(f"La información de {uploaded_file.name} es probablemente fraudulenta.")
+else:
+   st.write('No se han subido archivos PDF válidos.')
