@@ -3,7 +3,7 @@ FROM python:3.10.12
 RUN apt-get update 
 RUN apt-get install -y openjdk-17-jdk
 RUN pip install streamlit scikit-learn tensorflow tabula-py tabulate
-RUN pip install joblib==1.1.0
+RUN pip install joblib==1.3.2 
 COPY model/* /app/model/
 COPY src/* /app/
 WORKDIR /app
