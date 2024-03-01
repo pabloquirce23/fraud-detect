@@ -1,5 +1,5 @@
 streamlit
-tabula==2.2.0
+tabula-py==2.2.0
 joblib
 tensorflow
 openai==0.28
