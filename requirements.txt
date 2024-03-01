@@ -3,3 +3,4 @@ tabula
 joblib
 tensorflow
 openai
+scikit-learn==1.3.2
