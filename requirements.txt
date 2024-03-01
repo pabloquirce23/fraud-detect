@@ -1,2 +1,5 @@
 streamlit
 tabula
+joblib
+tensorflow
+openai
