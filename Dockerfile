@@ -1,7 +1,7 @@
 FROM python:3.10.12
 # FROM openjdk:11-jdk
 RUN apt-get update 
-RUN apt-get install -y openjdk-17-jdk
+RUN apt-get install -y openjdk-11-jdk
 RUN pip install streamlit scikit-learn tensorflow tabulate
 RUN pip install joblib==1.3.2
 RUN pip install openai==0.28
