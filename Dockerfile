@@ -5,7 +5,7 @@ RUN apt-get install -y openjdk-17-jdk
 RUN pip install streamlit scikit-learn tensorflow tabulate
 RUN pip install joblib==1.3.2
 RUN pip install openai==0.28
-RUN pip install tabula-py
+RUN pip install tabula-py==2.2.0
 COPY model/* /app/model/
 COPY src/* /app/
 WORKDIR /app
