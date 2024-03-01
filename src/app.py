@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import tabula
-from tabula import read_pdf
+from tabula.py import read_pdf
 import joblib
 import tensorflow as tf
 import openai
