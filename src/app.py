@@ -93,10 +93,10 @@ if not df.empty:
 
    # gráfica scatter plot que relaciona las predicciones de fraude con amount
    plt.figure(figsize=(10, 6))
-   sns.scatterplot(x=df['Amount'], y=df['Class'])
+   sns.scatterplot(x=df['Class'], y=df['Amount'])
    plt.title('Scatter plot of Fraud Predictions vs Amount')
-   plt.xlabel('Amount')
-   plt.ylabel('Fraud Detection')
+   plt.xlabel('Fraud Detection')
+   plt.ylabel('Amount')
    st.pyplot()
 
    # muestra de mensaje placeholder
