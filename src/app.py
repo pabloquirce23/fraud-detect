@@ -6,6 +6,7 @@ import tensorflow as tf
 import openai
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # inicio de fraud detect
 st.markdown("<h1 class='title'>FraudDetect</h1>", unsafe_allow_html=True)
@@ -92,11 +93,15 @@ if not df.empty:
    st.pyplot(fig)
 
    # gráfica scatter plot que relaciona las predicciones de fraude con amount
+   bins = np.arange(0, df['Amount'].max() + 100, 100)
+   df['Amount_binned'] = pd.cut(df['Amount'], bins)
+
    plt.figure(figsize=(10, 6))
-   sns.scatterplot(x=df['Class'], y=df['Amount'])
-   plt.title('Scatter plot of Fraud Predictions vs Amount')
-   plt.xlabel('Fraud Detection')
-   plt.ylabel('Amount')
+   sns.scatterplot(x=df['Amount_binned'], y=df['Class'])
+   plt.title('Predicciones de fraude y Cantidades')
+   plt.xlabel('Amount')
+   plt.ylabel('Fraud Prediction')
+   plt.xticks(rotation=90)
    st.pyplot()
 
    # muestra de mensaje placeholder
