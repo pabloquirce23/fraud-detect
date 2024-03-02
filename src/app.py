@@ -89,8 +89,11 @@ if not df.empty:
        # conteo de casos de fraude
        fraud_counts = df_cluster['Class'].value_counts()
 
+       # creación de las etiquetas según los datos
+       labels = ['No Fraud' if x == 0 else 'Fraud' for x in fraud_counts.index]
+
        # creación de la gráfica
-       axs[i].pie(fraud_counts, labels=['No Fraud', 'Fraud'], autopct='%1.1f%%', startangle=90)
+       axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90)
        axs[i].set_title(f'Cluster {cluster}')
 
    st.pyplot(fig)
