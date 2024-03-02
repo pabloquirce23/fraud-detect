@@ -79,7 +79,7 @@ if not df.empty:
    # gráfica que relaciona la predicción con los clusters
    clusters = df['Cluster'].unique()
 
-   fig, axs = plt.subplots(len(clusters), figsize=(10, 15))
+   fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
    # se crea una gráfica circular por cada cluster
    for i, cluster in enumerate(clusters):
