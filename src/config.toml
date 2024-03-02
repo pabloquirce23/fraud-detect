@@ -1,6 +1,3 @@
 [theme]
 base="dark"
 secondaryBackgroundColor="#ff4b4b"
-
-[deprecation]
-showPyplotGlobalUse = false
