@@ -92,15 +92,15 @@ if not df.empty:
 
    st.pyplot(fig)
 
-   # gráfica scatter plot que relaciona las predicciones de fraude con amount
+   # histograma que relaciona las predicciones de fraude con amount
    bins = np.arange(0, df['Amount'].max() + 100, 100)
    df['Amount_binned'] = pd.cut(df['Amount'], bins)
 
    plt.figure(figsize=(10, 6))
-   sns.scatterplot(x=df['Amount_binned'], y=df['Class'])
-   plt.title('Predicciones de fraude y Cantidades')
+   sns.histplot(data=df, x="Amount_binned", hue="Class", multiple="stack", binwidth=100)
+   plt.title('FraudPredict & Amount')
    plt.xlabel('Amount')
-   plt.ylabel('Fraud Prediction')
+   plt.ylabel('Count')
    plt.xticks(rotation=90)
    st.pyplot()
 
