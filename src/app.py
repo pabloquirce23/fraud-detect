@@ -70,21 +70,40 @@ if not df.empty:
    df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
    
    # testeo de gráficas con matplotlib
-   fig, axs = plt.subplots(3, figsize=(10, 15))
+   #fig, axs = plt.subplots(3, figsize=(10, 15))
 
    # gráfica que relaciona la predicción con los clusters
-   sns.countplot(x='Cluster', hue='Class', data=df, ax=axs[0])
-   axs[0].set_title('Relación entre el tipo de cluster y si es fraude')
+   #sns.countplot(x='Cluster', hue='Class', data=df, ax=axs[0])
+   #axs[0].set_title('Relación entre el tipo de cluster y si es fraude')
 
-   # gráfica que relaciona la predicción con el amount
-   sns.countplot(x='Class', hue='Amount', data=df, ax=axs[1])
-   axs[1].set_title('Relación entre si es fraude y la columna Amount')
+   # gráfica que relaciona la predicción con los clusters
+   clusters = df['Cluster'].unique()
 
-   # gráfica que relaciona los clusters con el amount
-   sns.countplot(x='Amount', hue='Cluster', data=df, ax=axs[2])
-   axs[2].set_title('Relación entre el tipo de cluster y la columna Amount')
+   fig, axs = plt.subplots(len(clusters), figsize=(10, 15))
+
+   # se crea una gráfica circular por cada cluster
+   for i, cluster in enumerate(clusters):
+       # filtra el dataframe al cluster pertinente
+       df_cluster = df[df['Cluster'] == cluster]
+
+       # conteo de casos de fraude
+       fraud_counts = df_cluster['Class'].value_counts()
+
+       # creación de la gráfica
+       axs[i].pie(fraud_counts, labels=['No Fraud', 'Fraud'], autopct='%1.1f%%', startangle=90)
+       axs[i].set_title(f'Cluster {cluster}')
 
    st.pyplot(fig)
+
+   # gráfica que relaciona la predicción con el amount
+   #sns.countplot(x='Class', hue='Amount', data=df, ax=axs[1])
+   #axs[1].set_title('Relación entre si es fraude y la columna Amount')
+
+   # gráfica que relaciona los clusters con el amount
+   #sns.countplot(x='Cluster', hue='Amount', data=df, ax=axs[2])
+   #axs[2].set_title('Relación entre el tipo de cluster y la columna Amount')
+
+   #st.pyplot(fig)
 
    # muestra de mensaje placeholder
    for i in range(len(df)):
