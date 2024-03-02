@@ -4,6 +4,7 @@ import tabula
 import joblib
 import tensorflow as tf
 import openai
+import matplotlib.pyplot as plt
 
 # inicio del chatbot
 st.markdown("<h1 class='title'>FraudDetect</h1>", unsafe_allow_html=True)
@@ -67,6 +68,24 @@ if not df.empty:
    df['Class'] = modelo.predict(df_tensor)
    df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
    
+   # testeo de gráficas con matplotlib
+   fig, axs = plt.subplots(3, figsize=(10, 15))
+
+   # gráfica de predicciones
+   axs[0].hist(df['Class'])
+   axs[0].set_title('Predicciones del modelo')
+
+   # gráfica de clusters
+   axs[1].hist(df['Cluster'])
+   axs[1].set_title('Clusters')
+
+   # gráfica de amount
+   axs[2].hist(df['Amount'])
+   axs[2].set_title('Amount')
+
+   st.pyplot(fig)
+
+   # muestra de mensaje placeholder
    for i in range(len(df)):
        if df['Class'][i] == 0:
            st.write(f"La información de {uploaded_file.name} es probablemente no fraudulenta, pertenece al cluster {df['Cluster'][i]}, y su mediana es {df['Median'][i]}.")
