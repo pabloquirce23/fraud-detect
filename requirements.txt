@@ -4,3 +4,4 @@ joblib
 tensorflow
 openai==0.28
 scikit-learn==1.3.2
+matplotlib
