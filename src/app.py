@@ -69,7 +69,7 @@ if not df.empty:
    df['Class'] = modelo.predict(df_tensor)
    df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
 
-   # gráfica que relaciona la predicción con los clusters
+   # gráfica que relaciona la predicción con los clusters (sorted para que salgan de menor a mayor)
    clusters = sorted(df['Cluster'].unique())
 
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
@@ -90,6 +90,14 @@ if not df.empty:
        axs[i].set_title(f'Cluster {cluster}')
 
    st.pyplot(fig)
+
+   # gráfica scatter plot que relaciona las predicciones de fraude con amount
+   plt.figure(figsize=(10, 6))
+   sns.scatterplot(x=df['Amount'], y=df['Class'])
+   plt.title('Scatter plot of Fraud Predictions vs Amount')
+   plt.xlabel('Amount')
+   plt.ylabel('Fraud Detection')
+   st.pyplot()
 
    # muestra de mensaje placeholder
    for i in range(len(df)):
