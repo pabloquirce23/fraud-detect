@@ -81,7 +81,7 @@ if not df.empty:
    axs[1].set_title('Relación entre si es fraude y la columna Amount')
 
    # gráfica que relaciona los clusters con el amount
-   sns.countplot(x='Cluster', hue='Amount', data=df, ax=axs[2])
+   sns.countplot(x='Amount', hue='Cluster', data=df, ax=axs[2])
    axs[2].set_title('Relación entre el tipo de cluster y la columna Amount')
 
    st.pyplot(fig)
