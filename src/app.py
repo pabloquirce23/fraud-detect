@@ -100,7 +100,7 @@ if not df.empty:
    df['Amount_binned_mid'] = df['Amount_binned'].apply(lambda x: x.mid)
 
    plt.figure(figsize=(10, 6))
-   sns.histplot(data=df, x="Amount_binned", hue="Class", multiple="stack", binwidth=100)
+   sns.histplot(data=df, x="Amount_binned_mid", hue="Class", multiple="stack", binwidth=100)
    plt.title('FraudPredict & Amount')
    plt.xlabel('Amount')
    plt.ylabel('Count')
