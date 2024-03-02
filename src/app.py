@@ -93,14 +93,14 @@ if not df.empty:
    st.pyplot(fig)
 
    # histograma que relaciona las predicciones de fraude con amount
-   bins = np.arange(0, df['Amount'].max() + 500, 500)
+   bins = np.arange(0, df['Amount'].max() + 250, 250)
    df['Amount_binned'] = pd.cut(df['Amount'], bins)
 
    # coger el valor numérico medio para poder representarlo en la gráfica
    df['Amount_binned_mid'] = df['Amount_binned'].apply(lambda x: x.mid)
 
    plt.figure(figsize=(10, 6))
-   sns.histplot(data=df, x="Amount_binned_mid", hue="Class", multiple="stack", binwidth=100)
+   sns.histplot(data=df, x="Amount_binned_mid", hue="Class", multiple="stack", binwidth=1000)
    plt.title('FraudPredict & Amount')
    plt.xlabel('Amount')
    plt.ylabel('Count')
