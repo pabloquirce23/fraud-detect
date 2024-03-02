@@ -68,16 +68,9 @@ df_clustering_tensor = tf.convert_to_tensor(df_clustering.values, dtype=tf.float
 if not df.empty:
    df['Class'] = modelo.predict(df_tensor)
    df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
-   
-   # testeo de gráficas con matplotlib
-   #fig, axs = plt.subplots(3, figsize=(10, 15))
 
    # gráfica que relaciona la predicción con los clusters
-   #sns.countplot(x='Cluster', hue='Class', data=df, ax=axs[0])
-   #axs[0].set_title('Relación entre el tipo de cluster y si es fraude')
-
-   # gráfica que relaciona la predicción con los clusters
-   clusters = df['Cluster'].unique()
+   clusters = sorted(df['Cluster'].unique())
 
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
@@ -97,16 +90,6 @@ if not df.empty:
        axs[i].set_title(f'Cluster {cluster}')
 
    st.pyplot(fig)
-
-   # gráfica que relaciona la predicción con el amount
-   #sns.countplot(x='Class', hue='Amount', data=df, ax=axs[1])
-   #axs[1].set_title('Relación entre si es fraude y la columna Amount')
-
-   # gráfica que relaciona los clusters con el amount
-   #sns.countplot(x='Cluster', hue='Amount', data=df, ax=axs[2])
-   #axs[2].set_title('Relación entre el tipo de cluster y la columna Amount')
-
-   #st.pyplot(fig)
 
    # muestra de mensaje placeholder
    for i in range(len(df)):
