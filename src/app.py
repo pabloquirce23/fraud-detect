@@ -5,6 +5,7 @@ import joblib
 import tensorflow as tf
 import openai
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # inicio del chatbot
 st.markdown("<h1 class='title'>FraudDetect</h1>", unsafe_allow_html=True)
@@ -71,9 +72,9 @@ if not df.empty:
    # testeo de gráficas con matplotlib
    fig, axs = plt.subplots(3, figsize=(10, 15))
 
-   # gráfica de predicciones
-   axs[0].hist(df['Class'])
-   axs[0].set_title('Predicciones del modelo')
+   # Gráfica de las predicciones del modelo y los clusters
+   sns.countplot(x='Cluster', hue='Class', data=df, ax=axs[0])
+   axs[0].set_title('Relación entre el tipo de cluster y si es fraude')
 
    # gráfica de clusters
    axs[1].hist(df['Cluster'])
