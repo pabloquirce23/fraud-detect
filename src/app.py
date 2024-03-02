@@ -7,7 +7,7 @@ import openai
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# inicio del chatbot
+# inicio de fraud detect
 st.markdown("<h1 class='title'>FraudDetect</h1>", unsafe_allow_html=True)
 
 # definición de columnas del dataset
@@ -72,17 +72,17 @@ if not df.empty:
    # testeo de gráficas con matplotlib
    fig, axs = plt.subplots(3, figsize=(10, 15))
 
-   # Gráfica de las predicciones del modelo y los clusters
+   # gráfica que relaciona la predicción con los clusters
    sns.countplot(x='Cluster', hue='Class', data=df, ax=axs[0])
    axs[0].set_title('Relación entre el tipo de cluster y si es fraude')
 
-   # gráfica de clusters
-   axs[1].hist(df['Cluster'])
-   axs[1].set_title('Clusters')
+   # gráfica que relaciona la predicción con el amount
+   sns.boxplot(x='Class', y='Amount', data=df, ax=axs[1])
+   axs[1].set_title('Relación entre si es fraude y la columna Amount')
 
-   # gráfica de amount
-   axs[2].hist(df['Amount'])
-   axs[2].set_title('Amount')
+   # gráfica que relaciona los clusters con el amount
+   sns.boxplot(x='Cluster', y='Amount', data=df, ax=axs[2])
+   axs[2].set_title('Relación entre el tipo de cluster y la columna Amount')
 
    st.pyplot(fig)
 
