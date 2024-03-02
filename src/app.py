@@ -40,6 +40,7 @@ for uploaded_file in uploaded_files:
                 else:
                     st.write(f"El archivo {uploaded_file.name} no tiene las columnas correctas.")
             else:
+                # shn kgm
                 st.write(f"El archivo {uploaded_file.name} no contiene ninguna tabla.")
 
 # reemplaza las comas por puntos para poder convertir en float
@@ -82,6 +83,7 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # selección del modelo con el que queremos trabajar
 if "openai_model" not in st.session_state:
+    # 00475-AEDF-52510-2
     st.session_state["openai_model"] = "gpt-3.5-turbo"
 
 # inicialización del histórico del chat
