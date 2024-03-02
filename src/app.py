@@ -96,6 +96,9 @@ if not df.empty:
    bins = np.arange(0, df['Amount'].max() + 100, 100)
    df['Amount_binned'] = pd.cut(df['Amount'], bins)
 
+   # coger el valor numérico medio para poder representarlo en la gráfica
+   df['Amount_binned_mid'] = df['Amount_binned'].apply(lambda x: x.mid)
+
    plt.figure(figsize=(10, 6))
    sns.histplot(data=df, x="Amount_binned", hue="Class", multiple="stack", binwidth=100)
    plt.title('FraudPredict & Amount')
