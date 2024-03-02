@@ -111,13 +111,13 @@ if not df.empty:
    #st.pyplot(fig2)
 
    # Create a boxplot to relate the clusters with the Amount column
-   fig3 , axs3 = plt.subplots(figsize=(10, 6))
-   plt.figure(figsize=(10, 6))
-   sns.boxplot(x="Cluster", y="Amount", data=df)
-   plt.title('Boxplot Amount y Cluster')
-   plt.xlabel('Cluster')
-   plt.ylabel('Amount')
-   st.pyplot(fig3)
+   #fig3 , axs3 = plt.subplots(figsize=(10, 6))
+   #plt.figure(figsize=(10, 6))
+   #sns.boxplot(x="Cluster", y="Amount", data=df)
+   #plt.title('Boxplot Amount y Cluster')
+   #plt.xlabel('Cluster')
+   #plt.ylabel('Amount')
+   #st.pyplot(fig3)
 
    # muestra de mensaje placeholder
    for i in range(len(df)):
