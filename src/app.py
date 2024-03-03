@@ -153,7 +153,7 @@ if not df.empty:
        labels = [f'Fraud {fraud_percentage:.1f}%', f'Not Fraud {not_fraud_percentage:.1f}%']
 
        # creación de la gráfica
-       axs[i].pie([fraud_percentage, not_fraud_percentage], labels=labels, startangle=90, colors = colors)
+       axs[i].pie([fraud_percentage, not_fraud_percentage], startangle=90, colors = colors)
 
        # alternación de la posición de título y leyenda
        if i % 2 == 0:
