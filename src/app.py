@@ -137,34 +137,6 @@ if not df.empty:
       st.pyplot(plt)
       st.divider()
 
-   # histograma que relaciona las predicciones de fraude con amount
-
-   #fig2 , axs2 = plt.subplots(figsize=(10, 6))
-
-   #bins = np.arange(0, df['Amount'].max() + 500, 500)
-   #df['Amount_binned'] = pd.cut(df['Amount'], bins)
-
-   # coger el valor numérico medio para poder representarlo en la gráfica
-   #df['Amount_binned_mid'] = df['Amount_binned'].apply(lambda x: x.mid)
-
-   #plt.figure(figsize=(10, 6))
-   #sns.histplot(data=df, x="Amount_binned_mid", hue="Class", multiple="stack", binwidth=10000, ax=axs2)
-   #plt.title('FraudPredict & Amount')
-   #plt.xlabel('Amount')
-   #plt.ylabel('Count')
-   #plt.xticks(rotation=90)
-
-   #st.pyplot(fig2)
-
-   # Create a boxplot to relate the clusters with the Amount column
-   #fig3 , axs3 = plt.subplots(figsize=(10, 6))
-   #plt.figure(figsize=(10, 6))
-   #sns.boxplot(x="Cluster", y="Amount", data=df)
-   #plt.title('Boxplot Amount y Cluster')
-   #plt.xlabel('Cluster')
-   #plt.ylabel('Amount')
-   #st.pyplot(fig3)
-
    # muestra de mensaje placeholder
    for i in range(len(df)):
        if df['Class'][i] == 0:
