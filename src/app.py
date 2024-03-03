@@ -106,6 +106,23 @@ if not df.empty:
    df['Class'] = modelo.predict(df_tensor)
    df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
 
+   # creación del dataframe para guardar los resultados
+   results_df = pd.DataFrame(columns=["Nombre PDF", "Fila PDF", "Detección Fraude", "Cluster"])
+
+   # diccionario para definir las etiquetas de la columna cluster
+   cluster_labels = {0: "PG", 1: "LS", 2: "BN", 3: "LN", 4: "IN"}
+
+   # bucle para añadir los resultados al dataframe
+   for i in range(len(df)):
+       new_row = pd.DataFrame({"Nombre PDF": [uploaded_file.name], 
+                               "Fila PDF": [i], 
+                               "Detección Fraude": ["NO FRAUDE ✅" if df['Class'][i] == 0 else "FRAUDE ❌"], 
+                               "Cluster": [cluster_labels[df['Cluster'][i]]]})
+       results_df = pd.concat([results_df, new_row], ignore_index=True)
+
+   st.dataframe(results_df)
+
+
    # gráfica que relaciona la predicción con los clusters (sorted para que salgan de menor a mayor)
    clusters = sorted(df['Cluster'].unique())
 
@@ -129,6 +146,7 @@ if not df.empty:
       st.pyplot(fig)
       st.divider()
 
+
    # Crea un gráfico de dispersión para visualizar los clusters
    plt.figure(figsize=(10, 6))
 
@@ -147,22 +165,6 @@ if not df.empty:
    if on:
       st.pyplot(plt)
       st.divider()
-
-   # creación del dataframe para guardar los resultados
-   results_df = pd.DataFrame(columns=["Nombre PDF", "Fila PDF", "Detección Fraude", "Cluster"])
-
-   # diccionario para definir las etiquetas de la columna cluster
-   cluster_labels = {0: "PG", 1: "LS", 2: "BN", 3: "LN", 4: "IN"}
-
-   # bucle para añadir los resultados al dataframe
-   for i in range(len(df)):
-       new_row = pd.DataFrame({"Nombre PDF": [uploaded_file.name], 
-                               "Fila PDF": [i], 
-                               "Detección Fraude": ["NO FRAUDE ✅" if df['Class'][i] == 0 else "FRAUDE ❌"], 
-                               "Cluster": [cluster_labels[df['Cluster'][i]]]})
-       results_df = pd.concat([results_df, new_row], ignore_index=True)
-
-   st.dataframe(results_df)
 else:
    st.write('No se han subido archivos PDF válidos.')
 
