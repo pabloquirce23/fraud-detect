@@ -154,10 +154,14 @@ if not df.empty:
        not_fraud_percentage = fraud_counts.get(0, 0) / total * 100 if 0 in fraud_counts else 0
 
        # creación de las etiquetas según los datos
-       labels = [f'No Fraud {not_fraud_percentage:.1f}%', f'Fraud {fraud_percentage:.1f}%']
+       labels = []
+       if 0 in fraud_counts:
+           labels.append(f'Not Fraud {not_fraud_percentage:.1f}%')
+       if 1 in fraud_counts:
+           labels.append(f'Fraud {fraud_percentage:.1f}%')
 
        # creación de la gráfica
-       axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+       axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors[:len(fraud_counts)])
        axs[i].set_title(cluster_labels_2[cluster])
    if on:
       st.pyplot(fig)
