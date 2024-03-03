@@ -154,8 +154,14 @@ if not df.empty:
 
        # creación de la gráfica
        axs[i].pie([fraud_percentage, not_fraud_percentage], labels=labels, startangle=90, colors = colors)
-       axs[i].set_title(cluster_labels_2[cluster])
-       axs[i].legend(labels, loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, ncol=5)
+
+       # alternación de la posición de título y leyenda
+       if i % 2 == 0:
+           axs[i].set_title(cluster_labels_2[cluster], y=1.1)
+           axs[i].legend(labels, loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=5)
+       else:
+           axs[i].set_title(cluster_labels_2[cluster], y=-0.1)
+           axs[i].legend(labels, loc='lower center', bbox_to_anchor=(0.5, 1.05), fancybox=True, shadow=True, ncol=5)
    if on:
       st.pyplot(fig)
       st.divider()
