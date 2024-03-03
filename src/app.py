@@ -99,6 +99,8 @@ df_tensor = tf.convert_to_tensor(df[columnas].values, dtype=tf.float32)  # Solo 
 
 df_clustering_tensor = tf.convert_to_tensor(df_clustering.values, dtype=tf.float32)
 
+st.divider()
+
 # aplicación de los modelos
 if not df.empty:
    # Switcher para mostrar o no las gráficas
@@ -122,6 +124,7 @@ if not df.empty:
 
    st.dataframe(results_df)
 
+   st.divider()
 
    # gráfica que relaciona la predicción con los clusters (sorted para que salgan de menor a mayor)
    clusters = sorted(df['Cluster'].unique())
