@@ -142,6 +142,9 @@ if not df.empty:
        # filtra el dataframe al cluster pertinente
        df_cluster = df[df['Cluster'] == cluster]
 
+       # se ordena el dataframe por la columna class para que se compacte la visualización de las gráficas
+       df_cluster = df_cluster.sort_values(by='Class')
+
        # conteo de casos de fraude
        fraud_counts = df_cluster['Class'].value_counts(sort=False)
 
