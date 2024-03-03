@@ -50,7 +50,7 @@ Para el entrenamiento de los modelos hemos utilizado un Dataset de Kaggle del cu
 ## VI.I Entrenamiento del modelo y comprobación del rendimiento del modelo de predicción de fraude.
 ![image](https://drive.google.com/uc?export=view&id=19KPX0qgIGxZre82wAkwNNWeHsKSxoYyt)
 
-![image](https://drive.google.com/uc?export=view&id=1svODOsOQpgTH5tiuKkMp0d6BZGTIaAsL)
+![image](https://drive.google.com/uc?export=view&id=16USXpr8_gcmercnaiyOpGsd8z4XLJ34y)
 
 ![image](https://drive.google.com/uc?export=view&id=1svODOsOQpgTH5tiuKkMp0d6BZGTIaAsL)
 
