@@ -150,8 +150,8 @@ if not df.empty:
 
        # cálculo del porcentaje de fraud y not fraud
        total = sum(fraud_counts)
-       fraud_percentage = fraud_counts[1] / total * 100
-       not_fraud_percentage = fraud_counts[0] / total * 100
+       fraud_percentage = fraud_counts.get(1, 0) / total * 100 if 1 in fraud_counts else 0
+       not_fraud_percentage = fraud_counts.get(0, 0) / total * 100 if 0 in fraud_counts else 0
 
        # creación de las etiquetas según los datos
        labels = [f'No Fraud {not_fraud_percentage:.1f}%', f'Fraud {fraud_percentage:.1f}%']
