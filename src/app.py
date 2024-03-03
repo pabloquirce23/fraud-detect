@@ -8,8 +8,36 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+
+# Estilo CSS para el título y pie de página
+st.write("""
+    <style>
+    .centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.image("img/banner.webp", use_column_width=True, output_format='auto')
+st.markdown("""
+   <style>
+   .title {
+      text-align: center;
+      color: #1a4ed8;
+   }
+   
+   </style>
+""", unsafe_allow_html=True)
+
 # inicio de fraud detect
-st.markdown("<h1 class='title'>FraudDetect</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='title'>Fraud-Detect</h1>", unsafe_allow_html=True)
+
+
+# Breve descripción de la aplicación
+st.write("**Fraud Detect** es una aplicación web diseñada para abordar de manera eficiente y precisa la detección de posibles fraudes bancarios. Su funcionalidad radica en la capacidad de procesar documentos en formato PDF, extrayendo las tablas contenidas en ellos mediante su lector integrado. A partir de los datos recopilados en estas tablas, la aplicación lleva a cabo un exhaustivo análisis para identificar posibles irregularidades financieras que puedan indicar la presencia de actividades fraudulentas entre una lista de clientes. Además muestra una sucesión de gráficas con datos que pueden ser de utilidad para el usuario.")
 
 # definición de columnas del dataset
 columnas = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
@@ -67,49 +95,72 @@ df_clustering_tensor = tf.convert_to_tensor(df_clustering.values, dtype=tf.float
 
 # aplicación de los modelos
 if not df.empty:
+
+   # Switcher para mostrar o no las gráficas
+   on = st.toggle('Mostrar las gráficas')
+
    df['Class'] = modelo.predict(df_tensor)
    df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
-
+   
    # gráfica que relaciona la predicción con los clusters (sorted para que salgan de menor a mayor)
    clusters = sorted(df['Cluster'].unique())
-
+   
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
-
+   
    # se crea una gráfica circular por cada cluster
    for i, cluster in enumerate(clusters):
        # filtra el dataframe al cluster pertinente
        df_cluster = df[df['Cluster'] == cluster]
-
+   
        # conteo de casos de fraude
        fraud_counts = df_cluster['Class'].value_counts()
-
+   
        # creación de las etiquetas según los datos
        labels = ['No Fraud' if x == 0 else 'Fraud' for x in fraud_counts.index]
-
+   
        # creación de la gráfica
        axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90)
        axs[i].set_title(f'Cluster {cluster}')
-
-   st.pyplot(fig)
-
+   if on:
+      st.pyplot(fig)
+   
+   # Crea un gráfico de dispersión para visualizar los clusters
+   plt.figure(figsize=(10, 6))
+   
+   for cluster in df['Cluster'].unique():
+   
+       # Filtra los datos por cluster
+       cluster_data = df[df['Cluster'] == cluster]
+   
+       # Plotea los datos con un color diferente para cada cluster
+       plt.scatter(cluster_data['Median'], cluster_data['Amount'], label=f'Cluster {cluster}')
+   
+   plt.title('Distribución de Transacciones por Clusters')
+   plt.xlabel('Mediana de V1-V28')
+   plt.ylabel('Amount')
+   plt.legend()
+   if on:
+      st.pyplot(plt)
+   
    # histograma que relaciona las predicciones de fraude con amount
+   
    #fig2 , axs2 = plt.subplots(figsize=(10, 6))
-
+   
    #bins = np.arange(0, df['Amount'].max() + 500, 500)
    #df['Amount_binned'] = pd.cut(df['Amount'], bins)
-
+   
    # coger el valor numérico medio para poder representarlo en la gráfica
    #df['Amount_binned_mid'] = df['Amount_binned'].apply(lambda x: x.mid)
-
+   
    #plt.figure(figsize=(10, 6))
    #sns.histplot(data=df, x="Amount_binned_mid", hue="Class", multiple="stack", binwidth=10000, ax=axs2)
    #plt.title('FraudPredict & Amount')
    #plt.xlabel('Amount')
    #plt.ylabel('Count')
    #plt.xticks(rotation=90)
-
+   
    #st.pyplot(fig2)
-
+   
    # Create a boxplot to relate the clusters with the Amount column
    #fig3 , axs3 = plt.subplots(figsize=(10, 6))
    #plt.figure(figsize=(10, 6))
@@ -118,21 +169,24 @@ if not df.empty:
    #plt.xlabel('Cluster')
    #plt.ylabel('Amount')
    #st.pyplot(fig3)
-
+   
    # muestra de mensaje placeholder
    for i in range(len(df)):
        if df['Class'][i] == 0:
-           st.write(f"La información de {uploaded_file.name} es probablemente no fraudulenta, pertenece al cluster {df['Cluster'][i]}, y su mediana es {df['Median'][i]}.")
+           st.write(f"La información de :green[{uploaded_file.name}] es probablemente **no fraudulenta**, pertenece al cluster **{df['Cluster'][i]}**, y su mediana es :green[**{df['Median'][i]}**].")
        else:
-           st.write(f"La información de {uploaded_file.name} es probablemente fraudulenta, pertenece al cluster {df['Cluster'][i]}, y su mediana es {df['Median'][i]}.")
+           st.write(f"La información de :red[{uploaded_file.name}] es probablemente **fraudulenta**, pertenece al cluster **{df['Cluster'][i]}**, y su mediana es :red[**{df['Median'][i]}**].")
+       st.divider()
 else:
    st.write('No se han subido archivos PDF válidos.')
+
+
 
 # inicio del chatbot
 st.markdown("<h1 class='title'>Eto'o Bot</h1>", unsafe_allow_html=True)
 
 # api key de openai
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+openai.api_key = st.secrets["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"]
 
 # selección del modelo con el que queremos trabajar
 if "openai_model" not in st.session_state:
@@ -178,3 +232,9 @@ if prompt := st.chat_input("¿Cómo va el asunto?"):
         message_placeholder.markdown(full_response)
     # añadido de la respuesta al histórico
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+# Pie de página con información de los creadores
+st.markdown('Creadores:')
+st.page_link("https://www.linkedin.com/in/pablo-oller-perez-7995721b2", label="**Pablo Oller Pérez**")
+st.page_link("https://www.linkedin.com/in/pablo-oller-perez-7995721b2", label="**Pablo Santos Quirce**")
+st.page_link("https://www.linkedin.com/in/pablo-oller-perez-7995721b2", label="**Alejandro Castillo Carmona**")
