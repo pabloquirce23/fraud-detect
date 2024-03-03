@@ -138,7 +138,7 @@ if not df.empty:
       st.divider()
 
    # creación del dataframe para guardar los resultados
-   results_df = pd.DataFrame(columns=["Nombre PDF", "Fila PDF", "FraudDetect", "Cluster"])
+   results_df = pd.DataFrame(columns=["Nombre PDF", "Fila PDF", "Detección Fraude", "Cluster"])
 
    # diccionario para definir las etiquetas de la columna cluster
    cluster_labels = {0: "PG", 1: "LS", 2: "BN", 3: "LN", 4: "IN"}
@@ -147,7 +147,7 @@ if not df.empty:
    for i in range(len(df)):
        new_row = pd.DataFrame({"Nombre PDF": [uploaded_file.name], 
                                "Fila PDF": [i], 
-                               "FraudDetect": ["NO FRAUDE ✅" if df['Class'][i] == 0 else "FRAUDE ❌"], 
+                               "Detección Fraude": ["NO FRAUDE ✅" if df['Class'][i] == 0 else "FRAUDE ❌"], 
                                "Cluster": [cluster_labels[df['Cluster'][i]]]})
        results_df = pd.concat([results_df, new_row], ignore_index=True)
 
