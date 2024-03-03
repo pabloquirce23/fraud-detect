@@ -186,7 +186,7 @@ else:
 st.markdown("<h1 class='title'>Eto'o Bot</h1>", unsafe_allow_html=True)
 
 # api key de openai
-openai.api_key = st.secrets[""]
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # selección del modelo con el que queremos trabajar
 if "openai_model" not in st.session_state:
