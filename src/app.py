@@ -155,6 +155,7 @@ if not df.empty:
        # creación de la gráfica
        axs[i].pie([fraud_percentage, not_fraud_percentage], labels=labels, startangle=90, colors = colors)
        axs[i].set_title(cluster_labels_2[cluster])
+       axs[i].legend(labels, loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, ncol=5)
    if on:
       st.pyplot(fig)
       st.divider()
