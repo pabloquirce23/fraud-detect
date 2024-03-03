@@ -149,7 +149,7 @@ if not df.empty:
        percentages = [f'{value / fraud_counts.sum() * 100:.1f}%' for value in fraud_counts.values]
 
        # creación de la gráfica
-       axs[i].pie(fraud_counts, labels=percentages, startangle=90)
+       axs[i].pie(fraud_counts, labels=percentages, startangle=90, colors = colors)
        axs[i].set_title(cluster_labels_2[cluster])
    if on:
       st.pyplot(fig)
