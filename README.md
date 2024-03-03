@@ -3,7 +3,9 @@ Descripción y logo
 
 ## Créditos
 [Pablo Santos Quirce](https://github.com/pabloquirce23)
+
 [Pablo Oller Pérez](https://github.com/pabloquirce23)
+
 [Alejandro Castillo](https://github.com/pabloquirce23)
 
 ## Video
