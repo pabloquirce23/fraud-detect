@@ -20,6 +20,13 @@ Para el entrenamiento de los modelos hemos utilizado un Dataset de Kaggle del cu
 ## II. Obtención de datos.
 ![image](https://drive.google.com/uc?export=view&id=1LY0ey4j7DPhUAtiGFBwMY7cr9I33Esve)
 
+Para obtener los datos que utilizaremos para entrenar nuestros modelos hemos decidido emplear un Dataset en el que tenemos información sobre transacciones bancarias. En él tratamos con las siguientes columnas:
+
+* **Time:** tiempo en segundos que pasaron desde la anterior transacción del Dataset.
+* **Columnas desde V1 a V28:** datos de un Análisis de Componentes Principales (técnica estadística utilizada para simplificar la complejidad de conjuntos de datos de grandes dimensiones) sometidos a una reducción para proteger la información personal de los clientes de la entidad bancaria.
+* **Amount:** Cantidad monetaria de la transacción bancaria.
+* **Class:** Muestra si la transacción bancaria es fraudulenta o no. 1 = Fraude y 0 = No es Fraude.
+
 ## III. Limpieza de datos.
 ![image](https://drive.google.com/uc?export=view&id=1e5_ytvHSuh7CMeL-K3hZ_geQdruGUvTJ)
 
