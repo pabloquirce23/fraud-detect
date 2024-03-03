@@ -142,10 +142,11 @@ if not df.empty:
 
    # bucle para añadir los resultados al dataframe
    for i in range(len(df)):
-       results_df = results_df.append({"Nombre PDF": uploaded_file.name, 
-                                       "Fila PDF": i, 
-                                       "FraudDetect": df['Class'][i], 
-                                       "Cluster": df['Cluster'][i]}, ignore_index=True)
+       new_row = pd.DataFrame({"Nombre PDF": [uploaded_file.name], 
+                               "Fila PDF": [i], 
+                               "FraudDetect": [df['Class'][i]], 
+                               "Cluster": [df['Cluster'][i]]})
+       results_df = pd.concat([results_df, new_row], ignore_index=True)
 
    st.dataframe(results_df)
 else:
