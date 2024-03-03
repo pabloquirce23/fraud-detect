@@ -10,7 +10,6 @@ import numpy as np
 
 
 
-
 # Estilo CSS para el título y pie de página
 st.write("""
     <style>
@@ -34,8 +33,11 @@ st.markdown("""
    </style>
 """, unsafe_allow_html=True)
 
+
+
 # inicio de fraud detect
 st.markdown("<h1 class='title'>Fraud-Detect</h1>", unsafe_allow_html=True)
+
 
 
 # Breve descripción de la aplicación
@@ -56,6 +58,7 @@ modelo_clustering = joblib.load('model/clustering_fraud_detect.pkl')
 df = pd.DataFrame(columns=columnas)
 
 
+
 # boton de subida de archivos (no hay límite y se pueden eliminar en la propia página)
 uploaded_files = st.file_uploader("Elige tus archivos PDF", type="pdf", accept_multiple_files=True)
 for uploaded_file in uploaded_files:
@@ -74,20 +77,28 @@ for uploaded_file in uploaded_files:
             else:
                 # shn kgm
                 st.write(f"El archivo {uploaded_file.name} no contiene ninguna tabla.")
+
 # reemplaza las comas por puntos para poder convertir en float
 df = df.replace(',', '.', regex=True)
+
 # conversión de los datos de los archivos a float
 df = df.astype(float)
+
 # cálculo de la media para poder aplicar el modelo de clustering
 columnas_median = ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 
                    'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 
                    'V20', 'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28']
+
 df['Median'] = df[columnas_median].mean(axis=1)
+
 # columnas necesarias para la aplicación del modelo de clustering
 df_clustering = df[['Median', 'Amount']]
+
 # conversión de dataframe a tensor
 df_tensor = tf.convert_to_tensor(df[columnas].values, dtype=tf.float32)  # Solo selecciona las columnas originales aquí
+
 df_clustering_tensor = tf.convert_to_tensor(df_clustering.values, dtype=tf.float32)
+
 # aplicación de los modelos
 if not df.empty:
    # Switcher para mostrar o no las gráficas
