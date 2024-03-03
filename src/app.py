@@ -132,9 +132,6 @@ if not df.empty:
    # diccionario para mapear los números del cluster a las etiquetas preferidas
    cluster_labels_2 = {0: "Personal Growth", 1: "Leisure", 2: "Basic Necessities", 3: "Loans", 4: "Investments"}
 
-   # diccionario para guardar los conteos de fraud y not fraud
-   fraud_counts = {'Fraud': 0, 'Not Fraud': 0}
-
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
    # definición de los colores para "Fraud" y "Not Fraud"
@@ -146,15 +143,17 @@ if not df.empty:
        df_cluster = df[df['Cluster'] == cluster]
 
        # conteo de casos de fraude
-       cluster_counts = df_cluster['Class'].value_counts()
-       for label, count in cluster_counts.items():
-           fraud_counts['Fraud' if label == 1 else 'Not Fraud'] += count
+       fraud_counts = df_cluster['Class'].value_counts()
 
        # cálculo del porcentaje de fraud y not fraud
-       percentages = [f'{value / sum(fraud_counts.values()) * 100:.1f}%' for value in fraud_counts.values()]
+       fraud_percentage = fraud_counts.get(1, 0) / fraud_counts.sum() * 100
+       not_fraud_percentage = fraud_counts.get(0, 0) / fraud_counts.sum() * 100
+
+       # creación de las etiquetas
+       labels = [f'Fraud {fraud_percentage:.1f}%', f'Not Fraud {not_fraud_percentage:.1f}%']
 
        # creación de la gráfica
-       axs[i].pie(fraud_counts.values(), labels=percentages, startangle=90, colors = colors)
+       axs[i].pie([fraud_percentage, not_fraud_percentage], labels=labels, startangle=90, colors = colors)
        axs[i].set_title(cluster_labels_2[cluster])
    if on:
       st.pyplot(fig)
