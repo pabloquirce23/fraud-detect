@@ -134,6 +134,9 @@ if not df.empty:
 
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
+   # definición de los colores para "Fraud" y "Not Fraud"
+   colors = ['red', 'green']
+
    # se crea una gráfica circular por cada cluster
    for i, cluster in enumerate(clusters):
        # filtra el dataframe al cluster pertinente
@@ -146,7 +149,7 @@ if not df.empty:
        labels = ['Not Fraud' if x == 0 else 'Fraud' for x in fraud_counts.index]
 
        # creación de la gráfica
-       axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90)
+       axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
        axs[i].set_title(cluster_labels_2[cluster])
    if on:
       st.pyplot(fig)
