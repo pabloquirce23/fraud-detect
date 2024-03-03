@@ -209,12 +209,12 @@ with st.sidebar:
             st.markdown(message["content"])
 
     # reacción al input del usuario
-    if prompt := st.chat_input("¿Cómo va el asunto?"):
+    if prompt := st.chat_input("Escriba aquí su consulta"):
         # muestra el mensaje del usuario en su contenetendor de mensaje
         with st.chat_message("user"):
             st.markdown(prompt)
         # añade el mensaje del usuario al histórico
-        st. session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "user", "content": prompt})
 
         with st.chat_message("assistant"):
             # placeholder vacío
