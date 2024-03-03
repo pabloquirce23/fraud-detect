@@ -142,29 +142,14 @@ if not df.empty:
        # filtra el dataframe al cluster pertinente
        df_cluster = df[df['Cluster'] == cluster]
 
-       # se ordena el dataframe por la columna class para que se compacte la visualización de las gráficas
-       df_cluster = df_cluster.sort_values(by='Class')
-
        # conteo de casos de fraude
-       fraud_counts = df_cluster['Class'].value_counts(sort=False)
+       fraud_counts = df_cluster['Class'].value_counts()
 
        # cálculo del porcentaje de fraud y not fraud
-       total = sum(fraud_counts)
-       fraud_percentage = fraud_counts.get(1, 0) / total * 100 if 1 in fraud_counts else 0
-       not_fraud_percentage = fraud_counts.get(0, 0) / total * 100 if 0 in fraud_counts else 0
-
-       # creación de las etiquetas según los datos
-       labels = []
-       sizes = []
-       if 0 in fraud_counts:
-           labels.append(f'Not Fraud {not_fraud_percentage:.1f}%')
-           sizes.append(fraud_counts.get(0, 0))
-       if 1 in fraud_counts:
-           labels.append(f'Fraud {fraud_percentage:.1f}%')
-           sizes.append(fraud_counts.get(1, 0))
+       percentages = [f'{value / fraud_counts.sum() * 100:.1f}%' for value in fraud_counts.values]
 
        # creación de la gráfica
-       axs[i].pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors[:len(sizes)])
+       axs[i].pie(fraud_counts, labels=percentages, startangle=90)
        axs[i].set_title(cluster_labels_2[cluster])
    if on:
       st.pyplot(fig)
