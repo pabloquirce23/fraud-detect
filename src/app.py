@@ -135,7 +135,7 @@ if not df.empty:
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
    # definición de los colores para "Fraud" y "Not Fraud"
-   colors = ['green', 'red']
+   colors = ['darkblue', 'lightblue']
 
    # se crea una gráfica circular por cada cluster
    for i, cluster in enumerate(clusters):
@@ -146,8 +146,8 @@ if not df.empty:
        fraud_counts = df_cluster['Class'].value_counts()
 
        # cálculo del porcentaje de fraud y not fraud
-       fraud_percentage = fraud_counts.get(1, 0) / fraud_counts.sum() * 100
        not_fraud_percentage = fraud_counts.get(0, 0) / fraud_counts.sum() * 100
+       fraud_percentage = 100 - not_fraud_percentage
 
        # creación de las etiquetas
        labels = [f'Fraud {fraud_percentage:.1f}%', f'Not Fraud {not_fraud_percentage:.1f}%']
