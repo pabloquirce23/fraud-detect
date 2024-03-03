@@ -130,7 +130,7 @@ if not df.empty:
    clusters = sorted(df['Cluster'].unique())
 
    # diccionario para mapear los números del cluster a las etiquetas preferidas
-   cluster_labels_2 = {0: "Personal Growth", 1: "Leisure", 2: "Basic Necessities", 3: "Loans", 4: "Investments"}
+   cluster_labels_2 = {0: "PG", 1: "LS", 2: "BN", 3: "LN", 4: "IN"}
 
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
