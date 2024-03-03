@@ -129,6 +129,9 @@ if not df.empty:
    # gráfica que relaciona la predicción con los clusters (sorted para que salgan de menor a mayor)
    clusters = sorted(df['Cluster'].unique())
 
+   # diccionario para mapear los números del cluster a las etiquetas preferidas
+   cluster_labels_2 = {0: "Personal Growth", 1: "Leisure", 2: "Basic Necessities", 3: "Loans", 4: "Investments"}
+
    fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
 
    # se crea una gráfica circular por cada cluster
@@ -140,11 +143,11 @@ if not df.empty:
        fraud_counts = df_cluster['Class'].value_counts()
 
        # creación de las etiquetas según los datos
-       labels = ['No Fraud' if x == 0 else 'Fraud' for x in fraud_counts.index]
+       labels = ['Not Fraud' if x == 0 else 'Fraud' for x in fraud_counts.index]
 
        # creación de la gráfica
        axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90)
-       axs[i].set_title(f'Cluster {cluster}')
+       axs[i].set_title(cluster_labels_2[cluster])
    if on:
       st.pyplot(fig)
       st.divider()
