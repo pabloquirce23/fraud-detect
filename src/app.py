@@ -137,13 +137,17 @@ if not df.empty:
       st.pyplot(plt)
       st.divider()
 
-   # muestra de mensaje placeholder
+   # creación del dataframe para guardar los resultados
+   results_df = pd.DataFrame(columns=["Nombre PDF", "Fila PDF", "FraudDetect", "Cluster"])
+
+   # bucle para añadir los resultados al dataframe
    for i in range(len(df)):
-       if df['Class'][i] == 0:
-           st.write(f"**NOMBRE:** :green[{uploaded_file.name}] | **NO FRAUDE ✅** | **CLUSTER: {df['Cluster'][i]}** | **MEDIANA:** :green[**{df['Median'][i]}**].")
-       else:
-           st.write(f"**NOMBRE:**  :red[{uploaded_file.name}] | **FRAUDE❌** | **CLUSTER: {df['Cluster'][i]}** | **MEDIANA:** :red[**{df['Median'][i]}**].")
-       st.divider()
+       results_df = results_df.append({"Nombre PDF": uploaded_file.name, 
+                                       "Fila PDF": i, 
+                                       "FraudDetect": df['Class'][i], 
+                                       "Cluster": df['Cluster'][i]}, ignore_index=True)
+
+   st.dataframe(results_df)
 else:
    st.write('No se han subido archivos PDF válidos.')
 
