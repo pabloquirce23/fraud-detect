@@ -148,8 +148,13 @@ if not df.empty:
        # conteo de casos de fraude
        fraud_counts = df_cluster['Class'].value_counts(sort=False)
 
+       # cálculo del porcentaje de fraud y not fraud
+       total = sum(fraud_counts)
+       fraud_percentage = fraud_counts[1] / total * 100
+       not_fraud_percentage = fraud_counts[0] / total * 100
+
        # creación de las etiquetas según los datos
-       labels = ['Not Fraud' if x == 0 else 'Fraud' for x in fraud_counts.index]
+       labels = [f'No Fraud {not_fraud_percentage:.1f}%', f'Fraud {fraud_percentage:.1f}%']
 
        # creación de la gráfica
        axs[i].pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
