@@ -362,15 +362,73 @@ plot_learning_curve(history, epochs)
 ![image](https://drive.google.com/uc?export=view&id=16sajE8s_rHvhw0lomre-TjooQp88xGAM)
 
 ## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
-![image](https://drive.google.com/uc?export=view&id=1t-lPQUipgF_RGGYtF-0kRLnGlu9KC3Sg)
 
-![image](https://drive.google.com/uc?export=view&id=1XQ1fDcUmmAhrqexqOzAmz-_3oKLg3UpQ)
+```
+ccdf['Median'] = ccdf[["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
+                       "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19",
+                       "V20", "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28"]].mean(axis=1)
+```
+
+```
+# Función para buscar el número óptimo de clusters
+def optimizacion_cluster(data, max_clstr):
+  means = []
+  inertias = []
+
+  for i in range(1, max_clstr):
+    kmeans= KMeans(n_clusters=i)
+    kmeans.fit(data)
+
+    means.append(i)
+    inertias.append(kmeans.inertia_)
+
+  # Generación de la gráfica
+  fig = plt.subplots(figsize=(10, 5))
+  plt.plot(means, inertias, 'o-')
+  plt.xlabel('Número de Clusters')
+  plt.ylabel('Inercia')
+  plt.grid(True)
+  plt.show()
+```
+
+```
+optimizacion_cluster(ccdf[["Median", "Amount"]], 20)
+```
 
 ![image](https://drive.google.com/uc?export=view&id=1-Hxrc6iCxJhUvrabTyO8z1VtCQFLW9HH)
 
+```
+for i in range(1, 11):
+  kmeans = KMeans(n_clusters=i)
+  kmeans.fit(ccdf[['Median', 'Amount']])
+  ccdf[f'KMeans_{i}'] = kmeans.labels_
+```
+
+```
+fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(20,10))
+
+for i, ax in enumerate(fig.axes, start=1):
+  ax.scatter(x=ccdf['Median'], y=ccdf['Amount'], c=ccdf[f'KMeans_{i}'])
+  ax.set_title(f'Número Clusters: {i}')
+```
+
 ![image](https://drive.google.com/uc?export=view&id=1kIDYR9hrX8Sy2ZRr_YXFJgsYYVigFO2x)
 
-![image](https://drive.google.com/uc?export=view&id=1XLIn-xVADGe5gRwXmEURV6cafU418_9-)
+```
+drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
+             'KMeans_5', 'KMeans_6', 'KMeans_7', 'KMeans_8',
+             'KMeans_9', 'KMeans_10']
+
+ccdf.drop(columns=drp_clmns, inplace=True)
+```
+
+```
+kmeans = KMeans(n_clusters=5)
+kmeans.fit(ccdf[['Median', 'Amount']])
+ccdf[f'KMeans_{5}'] = kmeans.labels_
+```
+
+![image](https://drive.google.com/uc?export=view&id=1ITCax33yYYf_CHFsX-3Znsd6ziXY71Gl)
 
 
 ## VII. PLN
