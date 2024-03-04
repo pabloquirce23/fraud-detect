@@ -33,8 +33,6 @@ Para obtener los datos que utilizaremos para entrenar nuestros modelos hemos dec
 
 En este fragmento de código podemos observar la carga de nuestro Dataset:
 
-![image](https://drive.google.com/uc?export=view&id=1LY0ey4j7DPhUAtiGFBwMY7cr9I33Esve)
-
 ```
 ccdf = pd.read_csv('/content/creditcard.csv')
 ```
@@ -44,15 +42,24 @@ ccdf = pd.read_csv('/content/creditcard.csv')
 
 Para la primera limpieza de datos sólo necesitamos eliminar los valores nulos existentes en el Dataset, para ello detectamos los valores nulos que hay en nuestro Dataframe:
 
-![image](https://drive.google.com/uc?export=view&id=1e5_ytvHSuh7CMeL-K3hZ_geQdruGUvTJ)
+```
+ccdf.isnull().sum()
+```
 
 Eliminamos los nulos en las columnas en las que están:
 
-![image](https://drive.google.com/uc?export=view&id=1qJQWEJOd90A87PaLxmxan4UxeWE9htqb)
+```
+ccdf.dropna(subset=["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
+                    "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19",
+                    "V20", "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28"],
+            inplace=True)
+```
 
-Además de eso transformamos todos los valores a tipo float:
+Además de eso transformamos todos los valores que no son del tipado correcto a tipo float:
 
-![image](https://drive.google.com/uc?export=view&id=11IaDE5n2gv-WH9t-CrDy9UB-cf2BceXY)
+```
+ccdf['V22'] = ccdf['V22'].astype(float)
+```
 
 
 ## IV. Exploración y visualización de los datos
