@@ -66,19 +66,36 @@ Aquí se puede ver el mapa de calor que hemos utilizado para observar las correl
 
 
 ## V. Preparación de los datos para los algoritmos de Machine Learning.
+
+Ahora pasamos a la preparación de los datos con referencia al desarrollo y entrenamiento de nuestros modelos. Para ello vamos a observar los valores átipicos de cada columna de nuestro Dataset. Esto se ha realizado mediante el siguiente código:
+
 ![image](https://drive.google.com/uc?export=view&id=1RuzEi8wgtCYrFYCs0vISaQI5kMP9xPWK)
+
+Y aquí podemos ver el resultado final:
 
 ![image](https://drive.google.com/uc?export=view&id=1fd_73OkFeu_cSfTSwWxs0Hee-xzxtsnE)
 
+Ahora pasamos al código con el que eliminamos los valores átipicos de las columnas de nuestro Dataset. En él se puede apreciar que hacemos una observación de varios factores relevantes para detectar correctamente estos valores. Observamos los límites del rango intercuartil (IQR), calculamos el rango (diferencia entre el percentil 75 y el percentil 25), el valor de corte (1,5 veces el IQR) y los límites inferiores y superiores:
+
 ![image](https://drive.google.com/uc?export=view&id=1bET0Ph70hvPnffkEwNc65QIvNxcrOIu7)
+
+Aquí pongo los resultados de todos estos factores de una de las columnas:
 
 ![image](https://drive.google.com/uc?export=view&id=1r4RbR-o67dRMWIu04b2OAMc8PKSMPogK)
 
+Después volvemos a mostrar las mismas gráficas usadas anteriormente para ver como han desaparecido la mayoría de los valores atípicos:
+
 ![image](https://drive.google.com/uc?export=view&id=12ihVD2-DgZqIelbH4nLm4yQ8IZewRU9r)
+
+Ahora haciendo otra pequeña visualización al Dataset podemos observar que los datos están escalados de formas totalmente diferentes las unas de las otras:
 
 ![image](https://drive.google.com/uc?export=view&id=1cAFwWPJXPHd5xs_9D7wcKlfN7lxU3B0V)
 
+Debido a ello nos tocará estandarizar los datos:
+
 ![image](https://drive.google.com/uc?export=view&id=19KPX0qgIGxZre82wAkwNNWeHsKSxoYyt)
+
+Después de estos procesos aplicamos unas pocas transformaciones más y ya tendremos los datos listos para el desarrollo de nuestros modelos.
 
 
 ## VI.I Entrenamiento del modelo y comprobación del rendimiento del modelo de predicción de fraude.
