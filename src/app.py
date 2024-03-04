@@ -174,7 +174,7 @@ if not df.empty:
        cluster_data = df[df['Cluster'] == cluster]
 
        # Plotea los datos con un color diferente para cada cluster
-       plt.scatter(cluster_data['Median'], cluster_data['Amount'], label=cluster_labels_2)
+       plt.scatter(cluster_data['Median'], cluster_data['Amount'], label=f'{cluster_labels_2}')
 
    plt.title('Distribución de Transacciones por Clusters')
    plt.xlabel('Mediana de V1-V28')
@@ -184,22 +184,6 @@ if not df.empty:
       st.pyplot(plt)
       st.divider()
 
-   # Configura el estilo del gráfico
-   sns.set_theme(style="whitegrid")
-    
-   # Crea un gráfico de barras para mostrar la cantidad de transacciones fraudulentas vs. no fraudulentas
-   plt.figure(figsize=(8, 6))
-   ax = sns.countplot(x="Class", data=df)
-   ax.set_title('Distribución de Predicciones de Fraude')
-   ax.set_xticklabels(['No Fraude', 'Fraude'])
-   ax.set_xlabel('Categoría')
-   ax.set_ylabel('Número de Transacciones')
-
-   # Muestra el gráfico en Streamlit
-   if on:
-      st.pyplot(plt)
-      st.divider()
-      
 else:
    st.write('No se han subido archivos PDF válidos.')
 
