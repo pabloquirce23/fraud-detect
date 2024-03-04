@@ -42,13 +42,13 @@ ccdf = pd.read_csv('/content/creditcard.csv')
 
 Para la primera limpieza de datos sólo necesitamos eliminar los valores nulos existentes en el Dataset, para ello detectamos los valores nulos que hay en nuestro Dataframe:
 
-```
+```python
 ccdf.isnull().sum()
 ```
 
 Eliminamos los nulos en las columnas en las que están:
 
-```
+```python
 ccdf.dropna(subset=["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
                     "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19",
                     "V20", "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28"],
@@ -57,7 +57,7 @@ ccdf.dropna(subset=["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
 
 Además de eso transformamos todos los valores que no son del tipado correcto a tipo float:
 
-```
+```python
 ccdf['V22'] = ccdf['V22'].astype(float)
 ```
 
@@ -69,7 +69,7 @@ Para la exploración y visualización de los datos realizamos distintos procesos
 
 Después realizamos una equilibración de Dataset para poder así ajustar la distribución de las clases y poder así representarlas de la misma manera. Esto lo hacemos porque en el Dataset que utilizamos nos hemos encontrado con un desequilibrio muy notable entre los casos de fraude y los casos de no fraude. Este tipo de desequilibrio puede sesgar enormemente los rendimientos de nuestro modelo de detección de fraude y de nuestro modelo de clusterización ya que cuando existe suele favorecer a la clase que más valores tiene. En este fragmento de código podemos apreciar un conteo del número de valores de cada clase:
 
-```
+```python
 legit = ccdf[ccdf['Class']==0]
 fraud = ccdf[ccdf['Class']==1]
 
@@ -91,7 +91,7 @@ Aquí se puede ver el mapa de calor que hemos utilizado para observar las correl
 
 Ahora pasamos a la preparación de los datos con referencia al desarrollo y entrenamiento de nuestros modelos. Para ello vamos a observar los valores átipicos de cada columna de nuestro Dataset. Esto se ha realizado mediante el siguiente código:
 
-```
+```python
 # Lista de colores
 colores = ['#FB8861', '#56F9BB', '#C5B3F9', '#F94144', '#F3722C', '#F8961E',
            '#F9C74F', '#90BE6D', '#43AA8B', '#577590', '#6D597A', '#B56576',
@@ -120,7 +120,7 @@ Y aquí podemos ver el resultado final:
 
 Ahora pasamos al código con el que eliminamos los valores átipicos de las columnas de nuestro Dataset. En él se puede apreciar que hacemos una observación de varios factores relevantes para detectar correctamente estos valores. Observamos los límites del rango intercuartil (IQR), calculamos el rango (diferencia entre el percentil 75 y el percentil 25), el valor de corte (1,5 veces el IQR) y los límites inferiores y superiores:
 
-```
+```python
 columnas = ['V'+str(i) for i in range(1, 29)]
 
 # Bucle que se encarga de eliminar los outliers de todas las columnas.
@@ -169,7 +169,7 @@ Ahora haciendo otra pequeña visualización al Dataset podemos observar que los 
 
 Debido a ello nos tocará estandarizar los datos:
 
-```
+```python
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
@@ -182,7 +182,7 @@ Después de estos procesos aplicamos unas pocas transformaciones más y ya tendr
 
 Mediante la biblioteca Keras construimos y entrenamos una red convolucional 1D:
 
-```
+```python
 epochs = 15
 model = Sequential()
 model.add(Conv1D(filters=32, kernel_size=2, activation='relu', input_shape=X_train[0].shape))
@@ -242,7 +242,7 @@ Epoch 15/15
 
 Ahora desarrollamos una función para poder visualizar la precisión y la pérdida de nuestro modelo durante el entrenamiento y la validación a lo largo de las épocas:
 
-```
+```python
 def plot_learning_curve(history, epoch):
   # Entrenamiento & valores de validation accuracy
   epoch_range = range(1, epoch+1)
@@ -268,7 +268,7 @@ Como podéis observar en el resultado gráfico nos ayuda a observar los cambios 
 
 Si os fijais en torno al epoch 7 se puede apreciar un subajuste, esto tras varias pruebas entrenando el modelo con distintas combinaciones de capas se lo hemos achacado a la capa de tipo MaxPool1D. Esta capa es muy utilizada en entrenamientos de modelos de características similares y por ello hacemos el apunte.
 
-```
+```python
 plot_learning_curve(history, epochs)
 ```
 
@@ -276,7 +276,7 @@ plot_learning_curve(history, epochs)
 
 Aquí mostramos la estructura de capas final de nuestra red neuronal convolucional 1D:
 
-```
+```python
 epochs = 15
 model = Sequential()
 model.add(Conv1D(filters=32, kernel_size=2, activation='relu', input_shape=X_train[0].shape))
@@ -296,7 +296,7 @@ model.add(Dense(units=1, activation='sigmoid'))
 
 Aquí observamos un resumen de las características de nuestra red neuronal:
 
-```
+```python
 model.summary()
 ```
 
@@ -336,7 +336,7 @@ _________________________________________________________________
 
 Y ahora vemos la progresión de nuestro modelo a medida que pasan las épocas:
 
-```
+```python
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
 history = model.fit(X_train, y_train,  epochs=epochs, validation_data=(X_test, y_test), verbose=1)
 ```
@@ -376,7 +376,7 @@ Epoch 15/15
 
 Ahora si nos fijamos en la representación gráfica de nuevo podemos observar que ya no existe el ajuste que perjudicaba a la precisión de nuestro modelo:
 
-```
+```python
 plot_learning_curve(history, epochs)
 ```
 
@@ -384,13 +384,13 @@ plot_learning_curve(history, epochs)
 
 ## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
 
-```
+```python
 ccdf['Median'] = ccdf[["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
                        "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19",
                        "V20", "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28"]].mean(axis=1)
 ```
 
-```
+```python
 # Función para buscar el número óptimo de clusters
 def optimizacion_cluster(data, max_clstr):
   means = []
@@ -412,20 +412,20 @@ def optimizacion_cluster(data, max_clstr):
   plt.show()
 ```
 
-```
+```python
 optimizacion_cluster(ccdf[["Median", "Amount"]], 20)
 ```
 
 ![image](https://drive.google.com/uc?export=view&id=1-Hxrc6iCxJhUvrabTyO8z1VtCQFLW9HH)
 
-```
+```python
 for i in range(1, 11):
   kmeans = KMeans(n_clusters=i)
   kmeans.fit(ccdf[['Median', 'Amount']])
   ccdf[f'KMeans_{i}'] = kmeans.labels_
 ```
 
-```
+```python
 fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(20,10))
 
 for i, ax in enumerate(fig.axes, start=1):
@@ -435,7 +435,7 @@ for i, ax in enumerate(fig.axes, start=1):
 
 ![image](https://drive.google.com/uc?export=view&id=1kIDYR9hrX8Sy2ZRr_YXFJgsYYVigFO2x)
 
-```
+```python
 drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
              'KMeans_5', 'KMeans_6', 'KMeans_7', 'KMeans_8',
              'KMeans_9', 'KMeans_10']
@@ -443,7 +443,7 @@ drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
 ccdf.drop(columns=drp_clmns, inplace=True)
 ```
 
-```
+```python
 kmeans = KMeans(n_clusters=5)
 kmeans.fit(ccdf[['Median', 'Amount']])
 ccdf[f'KMeans_{5}'] = kmeans.labels_
