@@ -180,27 +180,7 @@ Después de estos procesos aplicamos unas pocas transformaciones más y ya tendr
 
 ## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento.
 
-```
-def plot_learning_curve(history, epoch):
-  # Entrenamiento & valores de validation accuracy
-  epoch_range = range(1, epoch+1)
-  plt.plot(epoch_range, history.history['accuracy'])
-  plt.plot(epoch_range, history.history['val_accuracy'])
-  plt.title('Precisión del modelo')
-  plt.ylabel('Precisión')
-  plt.xlabel('Epoch')
-  plt.legend(['Train', 'Val'], loc='upper left')
-  plt.show()
-
-  # Entrenamiento & valores de validation loss
-  plt.plot(epoch_range, history.history['loss'])
-  plt.plot(epoch_range, history.history['val_loss'])
-  plt.title('Loss del modelo')
-  plt.ylabel('Loss')
-  plt.xlabel('Epoch')
-  plt.legend(['Train', 'Val'], loc='upper left')
-  plt.show()
-```
+Mediante la biblioteca Keras construimos y entrenamos una red convolucional 1D:
 
 ```
 epochs = 15
@@ -224,6 +204,8 @@ model.add(Dense(units=1, activation='sigmoid'))
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
 history = model.fit(X_train, y_train,  epochs=epochs, validation_data=(X_test, y_test), verbose=1)
 ```
+
+Aquí podemos observar el rendimiento y la validación de nuestro modelo a medida que avanzan las épocas:
 
 ```
 Epoch 1/15
@@ -258,11 +240,41 @@ Epoch 15/15
 5437/5437 [==============================] - 39s 7ms/step - loss: 0.0032 - accuracy: 0.9995 - val_loss: 0.0030 - val_accuracy: 0.9995
 ```
 
+Ahora desarrollamos una función para poder visualizar la precisión y la pérdida de nuestro modelo durante el entrenamiento y la validación a lo largo de las épocas:
+
+```
+def plot_learning_curve(history, epoch):
+  # Entrenamiento & valores de validation accuracy
+  epoch_range = range(1, epoch+1)
+  plt.plot(epoch_range, history.history['accuracy'])
+  plt.plot(epoch_range, history.history['val_accuracy'])
+  plt.title('Precisión del modelo')
+  plt.ylabel('Precisión')
+  plt.xlabel('Epoch')
+  plt.legend(['Train', 'Val'], loc='upper left')
+  plt.show()
+
+  # Entrenamiento & valores de validation loss
+  plt.plot(epoch_range, history.history['loss'])
+  plt.plot(epoch_range, history.history['val_loss'])
+  plt.title('Loss del modelo')
+  plt.ylabel('Loss')
+  plt.xlabel('Epoch')
+  plt.legend(['Train', 'Val'], loc='upper left')
+  plt.show()
+```
+
+Como podéis observar en el resultado gráfico nos ayuda a observar los cambios de la precisión y pérdida del modelo a medida que se va entrendando a lo largo de las épocas. También de esta forma podemos observar si hay sobreajuste o subajuste.
+
+Si os fijais en torno al epoch 7 se puede apreciar un subajuste, esto tras varias pruebas entrenando el modelo con distintas combinaciones de capas se lo hemos achacado a la capa de tipo MaxPool1D. Esta capa es muy utilizada en entrenamientos de modelos de características similares y por ello hacemos el apunte.
+
 ```
 plot_learning_curve(history, epochs)
 ```
 
 ![image](https://drive.google.com/uc?export=view&id=1VL9D6WcBqnWAFEng9oEXqlNy95xaSvQK)
+
+Aquí mostramos la estructura de capas final de nuestra red neuronal convolucional 1D:
 
 ```
 epochs = 15
@@ -281,6 +293,8 @@ model.add(Dropout(0.5))
 
 model.add(Dense(units=1, activation='sigmoid'))
 ```
+
+Aquí observamos un resumen de las características de nuestra red neuronal:
 
 ```
 model.summary()
@@ -320,6 +334,13 @@ Non-trainable params: 192 (768.00 Byte)
 _________________________________________________________________
 ```
 
+Y ahora vemos la progresión de nuestro modelo a medida que pasan las épocas:
+
+```
+model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
+history = model.fit(X_train, y_train,  epochs=epochs, validation_data=(X_test, y_test), verbose=1)
+```
+
 ```
 Epoch 1/15
 5437/5437 [==============================] - 57s 10ms/step - loss: 0.0556 - accuracy: 0.9804 - val_loss: 0.0034 - val_accuracy: 0.9995
@@ -352,6 +373,8 @@ Epoch 14/15
 Epoch 15/15
 5437/5437 [==============================] - 54s 10ms/step - loss: 0.0030 - accuracy: 0.9995 - val_loss: 0.0025 - val_accuracy: 0.9996
 ```
+
+Ahora si nos fijamos en la representación gráfica de nuevo podemos observar que ya no existe el ajuste que perjudicaba a la pérdida  de nuestro modelo:
 
 ```
 plot_learning_curve(history, epochs)
