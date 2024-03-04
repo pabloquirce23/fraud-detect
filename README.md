@@ -148,8 +148,6 @@ for columna in columnas:
 
 Aquí pongo los resultados de todos estos factores de una de las columnas:
 
-![image](https://drive.google.com/uc?export=view&id=1r4RbR-o67dRMWIu04b2OAMc8PKSMPogK)
-
 ```
 Quartile 25: -6.03606299434868 | Quartile 75: -0.419200076257679
 iqr: 5.616862918091001
