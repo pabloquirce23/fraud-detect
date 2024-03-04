@@ -181,11 +181,84 @@ Después de estos procesos aplicamos unas pocas transformaciones más y ya tendr
 
 
 ## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento.
-![image](https://drive.google.com/uc?export=view&id=19KPX0qgIGxZre82wAkwNNWeHsKSxoYyt)
 
-![image](https://drive.google.com/uc?export=view&id=16USXpr8_gcmercnaiyOpGsd8z4XLJ34y)
+```
+def plot_learning_curve(history, epoch):
+  # Entrenamiento & valores de validation accuracy
+  epoch_range = range(1, epoch+1)
+  plt.plot(epoch_range, history.history['accuracy'])
+  plt.plot(epoch_range, history.history['val_accuracy'])
+  plt.title('Precisión del modelo')
+  plt.ylabel('Precisión')
+  plt.xlabel('Epoch')
+  plt.legend(['Train', 'Val'], loc='upper left')
+  plt.show()
 
-![image](https://drive.google.com/uc?export=view&id=1svODOsOQpgTH5tiuKkMp0d6BZGTIaAsL)
+  # Entrenamiento & valores de validation loss
+  plt.plot(epoch_range, history.history['loss'])
+  plt.plot(epoch_range, history.history['val_loss'])
+  plt.title('Loss del modelo')
+  plt.ylabel('Loss')
+  plt.xlabel('Epoch')
+  plt.legend(['Train', 'Val'], loc='upper left')
+  plt.show()
+```
+
+```
+epochs = 15
+model = Sequential()
+model.add(Conv1D(filters=32, kernel_size=2, activation='relu', input_shape=X_train[0].shape))
+model.add(BatchNormalization())
+model.add(MaxPool1D(2)) # Aquí
+model.add(Dropout(0.2))
+
+model.add(Conv1D(filters=64, kernel_size=2, activation='relu'))
+model.add(BatchNormalization())
+model.add(MaxPool1D(2)) # Aquí
+model.add(Dropout(0.5))
+
+model.add(Flatten())
+model.add(Dense(units=64, activation='relu'))
+model.add(Dropout(0.5))
+
+model.add(Dense(units=1, activation='sigmoid'))
+
+model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
+history = model.fit(X_train, y_train,  epochs=epochs, validation_data=(X_test, y_test), verbose=1)
+```
+
+```
+Epoch 1/15
+5437/5437 [==============================] - 40s 7ms/step - loss: 0.0280 - accuracy: 0.9942 - val_loss: 0.0047 - val_accuracy: 0.9995
+Epoch 2/15
+5437/5437 [==============================] - 39s 7ms/step - loss: 0.0066 - accuracy: 0.9991 - val_loss: 0.0046 - val_accuracy: 0.9994
+Epoch 3/15
+5437/5437 [==============================] - 38s 7ms/step - loss: 0.0053 - accuracy: 0.9993 - val_loss: 0.0042 - val_accuracy: 0.9995
+Epoch 4/15
+5437/5437 [==============================] - 39s 7ms/step - loss: 0.0048 - accuracy: 0.9993 - val_loss: 0.0039 - val_accuracy: 0.9995
+Epoch 5/15
+5437/5437 [==============================] - 39s 7ms/step - loss: 0.0046 - accuracy: 0.9994 - val_loss: 0.0032 - val_accuracy: 0.9996
+Epoch 6/15
+5437/5437 [==============================] - 38s 7ms/step - loss: 0.0041 - accuracy: 0.9995 - val_loss: 0.0034 - val_accuracy: 0.9995
+Epoch 7/15
+5437/5437 [==============================] - 38s 7ms/step - loss: 0.0040 - accuracy: 0.9994 - val_loss: 0.0036 - val_accuracy: 0.9996
+Epoch 8/15
+5437/5437 [==============================] - 39s 7ms/step - loss: 0.0040 - accuracy: 0.9995 - val_loss: 0.0038 - val_accuracy: 0.9996
+Epoch 9/15
+5437/5437 [==============================] - 38s 7ms/step - loss: 0.0037 - accuracy: 0.9995 - val_loss: 0.0032 - val_accuracy: 0.9996
+Epoch 10/15
+5437/5437 [==============================] - 39s 7ms/step - loss: 0.0034 - accuracy: 0.9995 - val_loss: 0.0029 - val_accuracy: 0.9996
+Epoch 11/15
+5437/5437 [==============================] - 41s 8ms/step - loss: 0.0035 - accuracy: 0.9995 - val_loss: 0.0030 - val_accuracy: 0.9995
+Epoch 12/15
+5437/5437 [==============================] - 37s 7ms/step - loss: 0.0032 - accuracy: 0.9995 - val_loss: 0.0029 - val_accuracy: 0.9995
+Epoch 13/15
+5437/5437 [==============================] - 38s 7ms/step - loss: 0.0036 - accuracy: 0.9995 - val_loss: 0.0028 - val_accuracy: 0.9995
+Epoch 14/15
+5437/5437 [==============================] - 38s 7ms/step - loss: 0.0031 - accuracy: 0.9995 - val_loss: 0.0029 - val_accuracy: 0.9995
+Epoch 15/15
+5437/5437 [==============================] - 39s 7ms/step - loss: 0.0032 - accuracy: 0.9995 - val_loss: 0.0030 - val_accuracy: 0.9995
+```
 
 ![image](https://drive.google.com/uc?export=view&id=1VL9D6WcBqnWAFEng9oEXqlNy95xaSvQK)
 
