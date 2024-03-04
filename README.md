@@ -260,14 +260,106 @@ Epoch 15/15
 5437/5437 [==============================] - 39s 7ms/step - loss: 0.0032 - accuracy: 0.9995 - val_loss: 0.0030 - val_accuracy: 0.9995
 ```
 
+```
+plot_learning_curve(history, epochs)
+```
+
 ![image](https://drive.google.com/uc?export=view&id=1VL9D6WcBqnWAFEng9oEXqlNy95xaSvQK)
 
-![image](https://drive.google.com/uc?export=view&id=1iWpsKYozHsOawrhCHvFHowXzuWqYAcPs)
+```
+epochs = 15
+model = Sequential()
+model.add(Conv1D(filters=32, kernel_size=2, activation='relu', input_shape=X_train[0].shape))
+model.add(BatchNormalization())
+model.add(Dropout(0.2))
 
-![image](https://drive.google.com/uc?export=view&id=15pHnkp7nBNh8lsrD0tbk8kKWc5UIghOW)
+model.add(Conv1D(filters=64, kernel_size=2, activation='relu'))
+model.add(BatchNormalization())
+model.add(Dropout(0.5))
 
-![image](https://drive.google.com/uc?export=view&id=1bZ5zquMvlRIqzSDIJk-BfGLAejlvxTbN)
+model.add(Flatten())
+model.add(Dense(units=64, activation='relu'))
+model.add(Dropout(0.5))
 
+model.add(Dense(units=1, activation='sigmoid'))
+```
+
+```
+model.summary()
+```
+
+```
+Model: "sequential_2"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv1d_4 (Conv1D)           (None, 29, 32)            96        
+                                                                 
+ batch_normalization_4 (Bat  (None, 29, 32)            128       
+ chNormalization)                                                
+                                                                 
+ dropout_6 (Dropout)         (None, 29, 32)            0         
+                                                                 
+ conv1d_5 (Conv1D)           (None, 28, 64)            4160      
+                                                                 
+ batch_normalization_5 (Bat  (None, 28, 64)            256       
+ chNormalization)                                                
+                                                                 
+ dropout_7 (Dropout)         (None, 28, 64)            0         
+                                                                 
+ flatten_2 (Flatten)         (None, 1792)              0         
+                                                                 
+ dense_4 (Dense)             (None, 64)                114752    
+                                                                 
+ dropout_8 (Dropout)         (None, 64)                0         
+                                                                 
+ dense_5 (Dense)             (None, 1)                 65        
+                                                                 
+=================================================================
+Total params: 119457 (466.63 KB)
+Trainable params: 119265 (465.88 KB)
+Non-trainable params: 192 (768.00 Byte)
+_________________________________________________________________
+```
+
+```
+Epoch 1/15
+5437/5437 [==============================] - 57s 10ms/step - loss: 0.0556 - accuracy: 0.9804 - val_loss: 0.0034 - val_accuracy: 0.9995
+Epoch 2/15
+5437/5437 [==============================] - 57s 11ms/step - loss: 0.0049 - accuracy: 0.9993 - val_loss: 0.0029 - val_accuracy: 0.9995
+Epoch 3/15
+5437/5437 [==============================] - 58s 11ms/step - loss: 0.0041 - accuracy: 0.9995 - val_loss: 0.0026 - val_accuracy: 0.9995
+Epoch 4/15
+5437/5437 [==============================] - 55s 10ms/step - loss: 0.0039 - accuracy: 0.9995 - val_loss: 0.0024 - val_accuracy: 0.9996
+Epoch 5/15
+5437/5437 [==============================] - 58s 11ms/step - loss: 0.0037 - accuracy: 0.9995 - val_loss: 0.0024 - val_accuracy: 0.9996
+Epoch 6/15
+5437/5437 [==============================] - 54s 10ms/step - loss: 0.0036 - accuracy: 0.9995 - val_loss: 0.0027 - val_accuracy: 0.9996
+Epoch 7/15
+5437/5437 [==============================] - 54s 10ms/step - loss: 0.0036 - accuracy: 0.9995 - val_loss: 0.0027 - val_accuracy: 0.9996
+Epoch 8/15
+5437/5437 [==============================] - 57s 10ms/step - loss: 0.0034 - accuracy: 0.9995 - val_loss: 0.0027 - val_accuracy: 0.9994
+Epoch 9/15
+5437/5437 [==============================] - 57s 10ms/step - loss: 0.0033 - accuracy: 0.9995 - val_loss: 0.0026 - val_accuracy: 0.9996
+Epoch 10/15
+5437/5437 [==============================] - 55s 10ms/step - loss: 0.0030 - accuracy: 0.9995 - val_loss: 0.0027 - val_accuracy: 0.9996
+Epoch 11/15
+5437/5437 [==============================] - 55s 10ms/step - loss: 0.0033 - accuracy: 0.9995 - val_loss: 0.0027 - val_accuracy: 0.9996
+Epoch 12/15
+5437/5437 [==============================] - 56s 10ms/step - loss: 0.0031 - accuracy: 0.9995 - val_loss: 0.0023 - val_accuracy: 0.9996
+Epoch 13/15
+5437/5437 [==============================] - 56s 10ms/step - loss: 0.0031 - accuracy: 0.9995 - val_loss: 0.0024 - val_accuracy: 0.9996
+Epoch 14/15
+5437/5437 [==============================] - 56s 10ms/step - loss: 0.0031 - accuracy: 0.9995 - val_loss: 0.0026 - val_accuracy: 0.9995
+Epoch 15/15
+5437/5437 [==============================] - 54s 10ms/step - loss: 0.0030 - accuracy: 0.9995 - val_loss: 0.0025 - val_accuracy: 0.9996
+```
+
+```
+plot_learning_curve(history, epochs)
+```
+
+![image](https://drive.google.com/uc?export=view&id=16sajE8s_rHvhw0lomre-TjooQp88xGAM)
 
 ## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
 ![image](https://drive.google.com/uc?export=view&id=1t-lPQUipgF_RGGYtF-0kRLnGlu9KC3Sg)
