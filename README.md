@@ -180,6 +180,8 @@ Después de estos procesos aplicamos unas pocas transformaciones más y ya tendr
 
 ## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento.
 
+Pasamos a ver el desarrollo y entrenamiento de nuestro modelo de predicción para detectar fraude.
+
 Mediante la biblioteca Keras construimos y entrenamos una red convolucional 1D:
 
 ```python
@@ -384,11 +386,25 @@ plot_learning_curve(history, epochs)
 
 ## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
 
+Pasamos ahora al modelo de clusterización que se encarga de agrupar los registros aportados y de atribuirles uno de los siguientes grupos:
+
+* 0: Desarrollo Personal (Personal Growth)
+* 1: Ocio (Leisure)
+* 2: Necesidades Básicas (Basic Necessities)
+* 3: Préstamos (Loans)
+* 4: Inversiones (Investments)
+
+Para poder conseguir unas agrupaciones lógicas hemos creado un nuevo atributo llamado Median:
+
 ```python
 ccdf['Median'] = ccdf[["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
                        "V11", "V12", "V13", "V14", "V15", "V16", "V17", "V18", "V19",
                        "V20", "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28"]].mean(axis=1)
 ```
+
+Hay infinidad de formas de identificar el número óptimo de clusteres, nosotros nos hemos decantado por el método Elbow que nos muestra una medida de como de bien ha agrupado el algoritmo de K-Means los clusters.
+
+Ahora mostramos el código para apreciar el punto en el que el valor de agrupación es idóneo:
 
 ```python
 # Función para buscar el número óptimo de clusters
@@ -412,6 +428,10 @@ def optimizacion_cluster(data, max_clstr):
   plt.show()
 ```
 
+Aquí vemos la representación gráfica del código anterior.
+
+Viendo la gráfica observamos que la inercia (la suma de las distancias al centro del cluster más cercano elevada al cuadrado) decrece a medida que vamos aumentando el número de clusters. También podemos apreciar que auna gran equilibración a partir de la divisón de los 2 clusters en adelante.
+
 ```python
 optimizacion_cluster(ccdf[["Median", "Amount"]], 20)
 ```
@@ -425,6 +445,12 @@ for i in range(1, 11):
   ccdf[f'KMeans_{i}'] = kmeans.labels_
 ```
 
+Ahora vamos a comparar gráficamente los distintos usos de KMeans (en base al número de clusters) para poder decidir con qué tipo de agrupación quedarnos.
+
+Ahora presentamos un código que lo que hace es aplicar el algoritmo 10 veces (número elegido fijándonos en la gráfica anterior ya que a partir de los 10 clusters se estabiliza la inercia) y añade una columna a nuestro Dataframe con la información de a qué grupo pertenece cada fila por cada aplicación del algoritmo. El objetivo de estas gráficas es facilitar el visionado de las distintas agrupaciones y poder así tomar una decisión acertada sobre el número de clusters que nos conviene seleccionar.
+
+En este caso, tras apreciar las distintas características que nos facilitan las gráficas, nos hemos decantado por aplicar un KMeans con 5 clusters.
+
 ```python
 fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(20,10))
 
@@ -435,6 +461,8 @@ for i, ax in enumerate(fig.axes, start=1):
 
 ![image](https://drive.google.com/uc?export=view&id=1kIDYR9hrX8Sy2ZRr_YXFJgsYYVigFO2x)
 
+Tras aplicar el código anterior nuestro Dataset ha quedado con varias columnas que no necesitaremos más por lo que las tumbamos y limpiamos así el Dataset.
+
 ```python
 drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
              'KMeans_5', 'KMeans_6', 'KMeans_7', 'KMeans_8',
@@ -443,11 +471,15 @@ drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
 ccdf.drop(columns=drp_clmns, inplace=True)
 ```
 
+Aplicamos el algoritmo final con el número de clusters seleccionados con anterioridad.
+
 ```python
 kmeans = KMeans(n_clusters=5)
 kmeans.fit(ccdf[['Median', 'Amount']])
 ccdf[f'KMeans_{5}'] = kmeans.labels_
 ```
+
+Así quedaría el Dataset:
 
 ![image](https://drive.google.com/uc?export=view&id=1ITCax33yYYf_CHFsX-3Znsd6ziXY71Gl)
 
