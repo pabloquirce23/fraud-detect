@@ -8,20 +8,25 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+# Configuración de la página
+st.set_page_config(
+    page_title="Fraud-Detect",
+    page_icon="💳",
+    initial_sidebar_state="expanded",
+  
+)
 
-
-# Estilo CSS para el título y pie de página
+# Estilo CSS para el centrado de la tabla
 st.write("""
     <style>
-    .centered {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        
-    }
+    .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf + .st-emotion-cache-x1xsqf {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
     </style>
 """, unsafe_allow_html=True)
-
+# Estilo CSS para el título
 st.image("img/banner.webp", use_column_width=True, output_format='auto')
 st.markdown("""
    <style>
@@ -160,6 +165,8 @@ if not df.empty:
        else:
            axs[i].set_title(cluster_labels_2[cluster], y=-0.1)
            axs[i].legend(labels, loc='lower center', bbox_to_anchor=(0.5, 1.05), fancybox=True, shadow=True, ncol=5)
+   
+   # Si se enciende se activa la gráfica
    if on:
       st.pyplot(fig)
       st.divider()
@@ -180,6 +187,8 @@ if not df.empty:
    plt.xlabel('Mediana de V1-V28')
    plt.ylabel('Amount')
    plt.legend()
+    
+   # Si se enciende se activa la gráfica
    if on:
       st.pyplot(plt)
       st.divider()
