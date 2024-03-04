@@ -98,7 +98,7 @@ Debido a ello nos tocará estandarizar los datos:
 Después de estos procesos aplicamos unas pocas transformaciones más y ya tendremos los datos listos para el desarrollo de nuestros modelos.
 
 
-## VI.I Entrenamiento del modelo y comprobación del rendimiento del modelo de predicción de fraude.
+## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento.
 ![image](https://drive.google.com/uc?export=view&id=19KPX0qgIGxZre82wAkwNNWeHsKSxoYyt)
 
 ![image](https://drive.google.com/uc?export=view&id=16USXpr8_gcmercnaiyOpGsd8z4XLJ34y)
@@ -114,7 +114,7 @@ Después de estos procesos aplicamos unas pocas transformaciones más y ya tendr
 ![image](https://drive.google.com/uc?export=view&id=1bZ5zquMvlRIqzSDIJk-BfGLAejlvxTbN)
 
 
-## VI.II Entrenamiento del modelo y comprobación del rendimiento del modelo de clusterización.
+## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
 ![image](https://drive.google.com/uc?export=view&id=1t-lPQUipgF_RGGYtF-0kRLnGlu9KC3Sg)
 
 ![image](https://drive.google.com/uc?export=view&id=1XQ1fDcUmmAhrqexqOzAmz-_3oKLg3UpQ)
