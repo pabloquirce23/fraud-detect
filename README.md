@@ -35,6 +35,10 @@ En este fragmento de código podemos observar la carga de nuestro Dataset:
 
 ![image](https://drive.google.com/uc?export=view&id=1LY0ey4j7DPhUAtiGFBwMY7cr9I33Esve)
 
+```
+ccdf = pd.read_csv('/content/creditcard.csv')
+```
+
 
 ## III. Limpieza de datos.
 
