@@ -17,7 +17,7 @@ Descripción y logo
 
 
 ## I. Justificación y descripción del proyecto
-La funcionalidad de FraudDetect es detectar si las transacciones bancarias que les pasamos mediante tablas de PDF son fraude o no, además clasifica esas transacciones en diferentes agrupaciones en referencia al tipo de gasto que sean. También tiene integrado una funcionalidad de chatbot utilizando una API Key de OpenAI.
+La funcionalidad de FraudDetect es detectar si las transacciones bancarias que recibe mediante tablas de PDF son fraude o no, además de eso clasifica esas transacciones en diferentes agrupaciones en referencia al tipo de gasto que sean. Como añadido final le hemos integrado un chatbot desde cero.
 
 Para el entrenamiento de los modelos hemos utilizado un Dataset de Kaggle del cual podeis encontrar el enlace en el apartado de Bibliografía.
 
@@ -33,7 +33,7 @@ Para obtener los datos que utilizaremos para entrenar nuestros modelos hemos dec
 
 En este fragmento de código podemos observar la carga de nuestro Dataset:
 
-```
+```python
 ccdf = pd.read_csv('/content/creditcard.csv')
 ```
 
