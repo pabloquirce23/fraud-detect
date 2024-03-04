@@ -374,7 +374,7 @@ Epoch 15/15
 5437/5437 [==============================] - 54s 10ms/step - loss: 0.0030 - accuracy: 0.9995 - val_loss: 0.0025 - val_accuracy: 0.9996
 ```
 
-Ahora si nos fijamos en la representación gráfica de nuevo podemos observar que ya no existe el ajuste que perjudicaba a la pérdida  de nuestro modelo:
+Ahora si nos fijamos en la representación gráfica de nuevo podemos observar que ya no existe el ajuste que perjudicaba a la precisión de nuestro modelo:
 
 ```
 plot_learning_curve(history, epochs)
