@@ -243,5 +243,5 @@ with st.sidebar:
 # Pie de página con información de los creadores
 st.markdown('Creadores:')
 st.page_link("https://www.linkedin.com/in/pablo-oller-perez-7995721b2", label="**Pablo Oller Pérez**")
-st.page_link("https://www.linkedin.com/in/pablo-oller-perez-7995721b2", label="**Pablo Santos Quirce**")
-st.page_link("https://www.linkedin.com/in/pablo-oller-perez-7995721b2", label="**Alejandro Castillo Carmona**")
+st.page_link("https://github.com/acscr44", label="**Pablo Santos Quirce**")
+st.page_link("https://github.com/pabloquirce23", label="**Alejandro Castillo Carmona**")
