@@ -559,13 +559,44 @@ En este área se localiza el selector de cambio de pantallas que permite al usua
 ![image](https://drive.google.com/uc?export=view&id=1pXgar6GKGOpPAFPsdjAsUH5vUZJdL91j)<br>
 *menu_principal_selector*
 
-Se crean las variables st.session_state de los elementos 'page' para el control de la página seleccionada y 'prediction_generated' para el estado que se utiliza para emitir el mensaje *Predicción completada*. El botón **Genera Predicción** permite que al cambiar de página los datos aparezcan allí, ya que ninguna página hace uso de carga asíncrona.
+En app.py dentro de la función main() se crean las variables st.session_state de los elementos 'page' para el control de la página seleccionada y 'prediction_generated' para el estado que se utiliza para emitir el mensaje *Predicción completada*. El botón **Genera Predicción** permite que al cambiar de página los datos aparezcan allí, ya que ninguna página hace uso de carga asíncrona.
 
-![image](https://drive.google.com/uc?export=view&id=1bcBGmRnWUjDnBAuoontzflYWcCdGdMfT)<br>
-*app.py_control_paginas*
+```python
+# Contenido de la página de Inicio
+if st.session_state['page'] == 'Inicio':
+    show_home_page()
+
+# Contenido de la página de Predicción
+elif st.session_state['page'] == 'Predicción':
+    if st.session_state.get('df') is not None and not st.session_state['df'].empty:
+        show_prediction_page()  # Ahora accede a `st.session_state['df']` internamente
+    else:
+        st.error('Por favor, carga los datos en la página de Inicio primero.')
+
+# Contenido de otras páginas
+elif st.session_state['page'] == 'Análisis Exploratorio y Modelo':
+    show_analysis_page()
+
+# Contenido de la página de Eto'o Bot
+elif st.session_state['page'] == 'Eto\'o Bot':
+        show_etoobot_page()
+
+# Botón para cambiar a la página de Predicción
+if st.session_state['page'] not in ['Predicción', 'Análisis Exploratorio y Modelo', 'Eto\'o Bot']:
+    if st.button('Genera Predicción'):
+        if st.session_state.get('df') is not None and not st.session_state['df'].empty:
+            st.session_state['prediction_generated'] = True
+            st.session_state['page'] = 'Predicción'  # Esto debería actualizar el selectbox automáticamente
+        else:
+            st.error('Por favor, carga los datos en la página de Inicio primero.')
+
+# Mensaje de estado del procesamiento y predicción
+if st.session_state['page'] == 'Predicción' and st.session_state['prediction_generated']:
+    st.success('Predicción completada.')
+```
 
 
-La modularidad aplicada al proyecto facilita la lectura, el mantenimiento por otros programadores, la escalabilidad y reutilización del código. Aquí hay un esquema del arbol de carpetas y ficheros que componen la aplicación.
+La modularidad aplicada al proyecto facilita la lectura, el mantenimiento por otros programadores, la escalabilidad y reutilización del código. Aquí hay un esquema del árbol de carpetas y ficheros que componen la aplicación.
 
 ![image](https://drive.google.com/uc?export=view&id=1GBR3XheM0BsdXsGZDU8DlHrd13Ph94yH)<br>
 *project_tree*
@@ -584,16 +615,46 @@ El aspecto de la página de Predicción muestra la información generada por los
 ![image](https://drive.google.com/uc?export=view&id=1KroUYNdk_FmDjdZ0atYPUcf2GcMze5k3)<br>
 *prediccion_basic_preview*
 
-La función show_prediction_page comprueba que ha recibido mediante st.session_state el dataframe importado desde la pantalla de inicio.
+La función show_prediction_page del fichero ![prediction_page.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/prediction_page.py) comprueba que ha recibido mediante st.session_state el dataframe importado desde la pantalla de inicio.
 
-![image](https://drive.google.com/uc?export=view&id=10kztn92c_Rn1Rv9NOtZdGx-Ed7XYhpEB)<br>
-*show_prediction_page*
+```python
+def show_prediction_page():
+    # Titulo de la aplicación
+    st.markdown(custom_title('Fraud-Detect'), unsafe_allow_html=True)
+
+    st.subheader("Predicciones de Fraude")
+
+    # Verifica que el DataFrame exista y no esté vacío
+    if 'df' in st.session_state and not st.session_state['df'].empty:
+        df = st.session_state['df']  # Acceso directo al DataFrame
+```
 
 
 Como parte de los componentes gráficos que se presentan al realizar la predicción de los datos, esta gráfica es una de las disponibles en la página **Predicción** para la evaluación de la predicción. La segmentación por colores indica los distintos productos contratados por los clientes la entidad que suministra los datos.
 
 ![image](https://drive.google.com/uc?export=view&id=1u0W_4uz_xYzgk5aYxAjFNwN87yCw1KIP)<br>
 *grafica_distribucion_scatter*
+
+
+
+```python
+# Crea un gráfico de dispersión para visualizar los clusters
+plt.figure(figsize=(10, 6))
+
+for cluster in df['Cluster'].unique():
+
+    # Filtra los datos por cluster
+    cluster_data = df[df['Cluster'] == cluster]
+
+    # Plotea los datos con un color diferente para cada cluster
+    plt.scatter(cluster_data['Median'], cluster_data['Amount'], label=f'{cluster_labels_2[cluster]}')
+
+plt.title('Distribución de Transacciones por Clusters')
+plt.xlabel('Mediana de V1-V28')
+plt.ylabel('Amount')
+plt.legend()
+st.pyplot(plt)
+```
 
 #### Tema de personalización
 
@@ -612,12 +673,14 @@ secondaryBackgroundColor="#003049"
 textColor="#f1faee"
 ```
 
-En línea con los principios de la explicabilidad en los sistemas de IA que generan tales predicciones la aplicación ofrece una aproximación de cómo se realiza el Análisis Exploratorio, Estudio y Desarrollo de los modelos implicados en esta aplicación. Esta visualización se consigue haciendo una importación y procesado de cada una de los componentes que contiene un notebook de Jupyter: celdas markdown, celdas de código, resultados en formato texto, resultados gráficos o imágenes, tablas o dataframes, etc.
+#### Pantalla de Análisis Exploratorio y Modelo
+
+En línea con los principios de la explicabilidad respecto a los sistemas de IA que generan tales predicciones en base a modelos, la aplicación **Fraud-Detect** ofrece una aproximación de cómo se realiza el *Análisis Exploratorio, Estudio y Desarrollo de los Modelos* integrados en esta aplicación. Esta visualización se consigue haciendo una importación y procesado de cada una de los componentes que contiene un notebook de Jupyter: celdas markdown, celdas de código, resultados en formato texto, resultados gráficos o imágenes, tablas o dataframes, etc.
 
 ![image](https://drive.google.com/uc?export=view&id=1Gm3jWfyb7Lm-b-vxHndATrLWayGEJDOS)<br>
 *nbformat_jupyter_1*
 
-Esta función invoca al método cargar_cuaderno_jupyter que lee el fichero .ipynb ubicado en una carpeta y al 
+La función **show_analysis_page** del fichero ![pages.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/pages.py) invoca al método cargar_cuaderno_jupyter que lee el fichero .ipynb indicado en la ruta, y este invoca a su vez a mostrar_cuaderno_jupyter que realiza el procesado del notebook.
 ```python
 def show_analysis_page():
     # Titulo de la aplicación
@@ -677,6 +740,81 @@ def mostrar_cuaderno_jupyter(nb, num_celda_inicio=0, num_celda_final=None):
                     st.text(output.text)
                 elif output.output_type == 'error':
                     st.error('\n'.join(output.traceback))
+```
+
+#### Pantalla de Eto'o Bot
+
+![image](https://drive.google.com/uc?export=view&id=11paefrcw7Kmol00uzPoTJjV-kfW87Nlo)<br>
+*etoo_bot_page*
+
+La función **show_etoobot_page** del fichero ![etoo_bot.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/etoo_bot.py) es llamada cuando el usuario selecciona desde la función main() de **app.py** el acceso a esta herramienta.
+
+```python
+# Contenido de la página de Eto'o Bot
+elif st.session_state['page'] == 'Eto\'o Bot':
+        show_etoobot_page()
+```
+
+#### Módulo de Componentes
+
+En ![components.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/components.py) se almacena todo el contenido HTML que es utilizado en la aplicación. Así se facilita la localización del código relacionado con el lenguaje de marcas.
+```python
+from static.styles.css_styles import *
+
+def custom_footer():
+    html_content = (
+    FOOTER_STYLE +
+    "<div class=\"custom-footer\">" +
+        "<p>Creadores:</p>" +
+        "<a href=\"https://www.linkedin.com/in/pablo-oller-perez-7995721b2\" target=\"_blank\">Pablo Oller Pérez</a><br>" +
+        "<a href=\"https://github.com/pabloquirce23\" target=\"_blank\">Pablo Santos Quirce</a><br>" +
+        "<a href=\"https://github.com/acscr44\" target=\"_blank\">Alejandro Castillo Carmona</a>" +
+    "</div>"
+    )
+    return html_content
+
+def custom_width():
+    return WIDTH_STILE
+
+def description():
+    html_content = f"""
+    <div>
+        <p><strong>Fraud Detect</strong> es una aplicación web diseñada para abordar de manera eficiente y precisa la detección de 
+        posibles fraudes bancarios.<br>
+        Su funcionalidad radica en la capacidad de procesar documentos en formato PDF, extrayendo las tablas contenidas en ellos 
+        mediante su lector integrado. 
+        A partir de los datos recopilados en estas tablas, la aplicación lleva a cabo un exhaustivo análisis para identificar 
+        posibles irregularidades financieras que puedan indicar la presencia de actividades fraudulentas entre una lista de clientes.<br>
+        Además muestra una sucesión de gráficas con datos que pueden ser de utilidad para el usuario.
+        </p>
+        <br><br>
+    </div>
+    """.strip().replace('\n', '')
+    return html_content
+```
+
+#### Módulo de Estilos
+
+En ![css_styles.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/css_styles.py) reune toda la colección de personalización CSS.
+```python
+FOOTER_STYLE = """
+    <style>
+        .custom-footer {
+            bottom: 0;
+            padding: 1rem;
+            margin-top: 35rem;
+            font-size: 16px;
+            text-align: center;    
+            width: 100%;
+            border-top: 1px solid #aaa;     
+        }
+
+        .custom-footer p {
+            margin: 0;
+            color: #666;
+        }
+    </style>
+    """
 ```
 
 
