@@ -482,6 +482,68 @@ Este es el aspecto final del conjunto de datos después de la limpieza y la impl
 
 ## VII. PLN
 
+Para abordar el desafío del Procesamiento del Lenguaje Natural, hemos optado por desarrollar un chatbot desde cero. Consideramos que este es un complemento valioso para nuestra aplicación, ya que proporciona a los usuarios un asistente personal accesible con solo dos clics para resolver cualquier duda que puedan tener sobre la información proporcionada o sobre conceptos relacionados con el sector bancario.
+
+![image](https://drive.google.com/uc?export=view&id=15H1sPLH-fxr4-LlkPbadj9HykIwm37gv)
+
+A continuación, se detalla el funcionamiento del chatbot.
+
+Gracias a la carpeta Secrets de StreamlitCloud, podemos proteger y utilizar nuestra clave API de OpenAI de manera segura:
+
+```python
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+```
+
+El modelo utilizado para desarrollar el chatbot es el siguiente:
+
+```python
+if "openai_model" not in st.session_state:
+    # 00475-AEDF-52510-2
+    st.session_state["openai_model"] = "gpt-3.5-turbo"
+```
+
+A continuación, se presenta la estructura de nuestro chatbot.
+
+Inicializamos el historial del chat si aún no se ha hecho:
+
+```python
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+```
+
+Este bucle muestra todos los mensajes en el historial del chat:
+
+```python
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+```
+
+Este código recoge la entrada del usuario, la muestra como mensaje en la interfaz de usuario y la añade al historial del chat. Luego, genera y visualiza la respuesta del chatbot utilizando la función `ChatCompletion.create` de la API de OpenAI. La respuesta se genera en tiempo real gracias a la opción `stream=True`. Finalmente, añade la respuesta del chatbot al historial del chat y la muestra en la interfaz de usuario.
+
+```python
+if prompt := st.chat_input("Escriba aquí su consulta"):
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        for response in openai.ChatCompletion.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
+        ):
+            full_response += response.choices[0].delta.get("content", "")
+                    message_placeholder.markdown(full_response + "| ")
+            message_placeholder.markdown(full_response)
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
+```
+
 
 ## VIII. Aplicación web
 
