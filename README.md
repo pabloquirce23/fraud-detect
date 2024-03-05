@@ -547,6 +547,62 @@ if prompt := st.chat_input("Escriba aquí su consulta"):
 
 ## VIII. Aplicación web
 
+La aplicación web se ha hecho mediante el framework de Streamlit que está diseñado para facilitar al desarrollador y al analista la creación de interfaces interactivas con el lenguaje Python. Los fuentes del proyecto están en este ![enlace](https://github.com/pabloquirce23/fraud-detect/tree/main/src).
+
+### Lógica de la interfaz
+
+#### Menú Principal
+
+
+En este área se localiza el selector de cambio de pantallas que permite al usuario moverse entre las distintas pantallas disponibles.
+
+![image](https://drive.google.com/uc?export=view&id=1pXgar6GKGOpPAFPsdjAsUH5vUZJdL91j)<br>
+*menu_principal_selector*
+
+
+![image](https://drive.google.com/uc?export=view&id=1bcBGmRnWUjDnBAuoontzflYWcCdGdMfT)<br>
+*app.py_control_paginas*
+
+#### Pantalla de inicio
+
+El punto de entrada es la pantalla de inicio desde la que se aporta una introducción sobre la utilidad que proporciona al público. Seleccionados los extractos en formato pdf que se van a analizar se inicia el proceso de predicción pulsando el botón **"Genera Predicción"** tras lo que se avisará con un mensaje *"Predicción completada"*.
+
+![image](https://drive.google.com/uc?export=view&id=1H5XA4F0JCoSLDkunvyfOkK4zuEWgXeJD)<br>
+*genera_prediccion_aviso*
+
+#### Pantalla de predicción
+
+
+![image](https://drive.google.com/uc?export=view&id=1KroUYNdk_FmDjdZ0atYPUcf2GcMze5k3)<br>
+*prediccion_basic_preview*
+
+La modularidad aplicada al proyecto facilita la lectura, el mantenimiento por otros programadores, la escalabilidad y reutilización del código. Aquí hay un esquema del arbol de carpetas y ficheros que componen la aplicación.
+
+![image](https://drive.google.com/uc?export=view&id=1GBR3XheM0BsdXsGZDU8DlHrd13Ph94yH)<br>
+*project_tree*
+
+
+
+Como parte de los componentes gráficos que se presentan al realizar la predicción de los datos, esta gráfica es una de las disponibles en la página **Predicción** para la evaluación de la predicción. La segmentación por colores indica los distintos productos contratados por los clientes la entidad que suministra los datos.
+
+![image](https://drive.google.com/uc?export=view&id=1u0W_4uz_xYzgk5aYxAjFNwN87yCw1KIP)<br>
+*grafica_distribucion_scatter*
+
+#### Tema de personalización
+
+La posibilidad de aplicar un tema personalizado de Streamlit requiere del fichero "./streamlit/config.toml" que debe ubicarse en la raíz del proyecto. Esto aplica estilos sin tener que convertir componentes nativos de Streamlit como por ejemplo *st.dataframe* a tablas en html-css. Los componentes nativos de Streamlit ofrecen muchas posibilidades, como hacer zoom, cambiar el tamaño, busquedas, ordenaciones, etc.
+
+
+![image](https://drive.google.com/uc?export=view&id=1vQXWv0UFTwlJcjnCFz8h4-Vrvs0inS9M)<br>
+*custom_theme_config_toml*
+
+
+En línea con los principios de la explicabilidad en los sistemas de IA que generan tales predicciones la aplicación ofrece una aproximación de cómo se realiza el Análisis Exploratorio, Estudio y Desarrollo de los modelos implicados en esta aplicación. Esta visualización se consigue haciendo una importación y procesado de cada una de los componentes que contiene un notebook de Jupyter: celdas markdown, celdas de código, resultados en formato texto, resultados gráficos o imágenes, tablas o dataframes, etc.
+
+![image](https://drive.google.com/uc?export=view&id=1Gm3jWfyb7Lm-b-vxHndATrLWayGEJDOS)<br>
+*nbformat_jupyter_1*
+
+
 
 ## IX. Conclusiones
 
