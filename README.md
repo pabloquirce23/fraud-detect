@@ -559,9 +559,16 @@ En este área se localiza el selector de cambio de pantallas que permite al usua
 ![image](https://drive.google.com/uc?export=view&id=1pXgar6GKGOpPAFPsdjAsUH5vUZJdL91j)<br>
 *menu_principal_selector*
 
+Se crean las variables st.session_state de los elementos 'page' para el control de la página seleccionada y 'prediction_generated' para el estado que se utiliza para emitir el mensaje *Predicción completada*. El botón **Genera Predicción** permite que al cambiar de página los datos aparezcan allí, ya que ninguna página hace uso de carga asíncrona.
 
 ![image](https://drive.google.com/uc?export=view&id=1bcBGmRnWUjDnBAuoontzflYWcCdGdMfT)<br>
 *app.py_control_paginas*
+
+
+La modularidad aplicada al proyecto facilita la lectura, el mantenimiento por otros programadores, la escalabilidad y reutilización del código. Aquí hay un esquema del arbol de carpetas y ficheros que componen la aplicación.
+
+![image](https://drive.google.com/uc?export=view&id=1GBR3XheM0BsdXsGZDU8DlHrd13Ph94yH)<br>
+*project_tree*
 
 #### Pantalla de inicio
 
@@ -572,15 +579,15 @@ El punto de entrada es la pantalla de inicio desde la que se aporta una introduc
 
 #### Pantalla de predicción
 
+El aspecto de la página de Predicción muestra la información generada por los componentes de Streamlit para mostrar la información de interés para el usuario.
 
 ![image](https://drive.google.com/uc?export=view&id=1KroUYNdk_FmDjdZ0atYPUcf2GcMze5k3)<br>
 *prediccion_basic_preview*
 
-La modularidad aplicada al proyecto facilita la lectura, el mantenimiento por otros programadores, la escalabilidad y reutilización del código. Aquí hay un esquema del arbol de carpetas y ficheros que componen la aplicación.
+La función show_prediction_page comprueba que ha recibido mediante st.session_state el dataframe importado desde la pantalla de inicio.
 
-![image](https://drive.google.com/uc?export=view&id=1GBR3XheM0BsdXsGZDU8DlHrd13Ph94yH)<br>
-*project_tree*
-
+![image](https://drive.google.com/uc?export=view&id=10kztn92c_Rn1Rv9NOtZdGx-Ed7XYhpEB)<br>
+*show_prediction_page*
 
 
 Como parte de los componentes gráficos que se presentan al realizar la predicción de los datos, esta gráfica es una de las disponibles en la página **Predicción** para la evaluación de la predicción. La segmentación por colores indica los distintos productos contratados por los clientes la entidad que suministra los datos.
@@ -596,11 +603,82 @@ La posibilidad de aplicar un tema personalizado de Streamlit requiere del ficher
 ![image](https://drive.google.com/uc?export=view&id=1vQXWv0UFTwlJcjnCFz8h4-Vrvs0inS9M)<br>
 *custom_theme_config_toml*
 
+Estas especificaciones son las que nos ha permitido modificar los colores predeterminados de Streamlit y mejorar su apariencia.
+```
+[theme]
+primaryColor="#1d3557"
+backgroundColor="#457b9d"
+secondaryBackgroundColor="#003049"
+textColor="#f1faee"
+```
 
 En línea con los principios de la explicabilidad en los sistemas de IA que generan tales predicciones la aplicación ofrece una aproximación de cómo se realiza el Análisis Exploratorio, Estudio y Desarrollo de los modelos implicados en esta aplicación. Esta visualización se consigue haciendo una importación y procesado de cada una de los componentes que contiene un notebook de Jupyter: celdas markdown, celdas de código, resultados en formato texto, resultados gráficos o imágenes, tablas o dataframes, etc.
 
 ![image](https://drive.google.com/uc?export=view&id=1Gm3jWfyb7Lm-b-vxHndATrLWayGEJDOS)<br>
 *nbformat_jupyter_1*
+
+Esta función invoca al método cargar_cuaderno_jupyter que lee el fichero .ipynb ubicado en una carpeta y al 
+```python
+def show_analysis_page():
+    # Titulo de la aplicación
+    st.markdown(custom_title('Fraud-Detect'), unsafe_allow_html=True)
+
+    st.subheader("Análisis Exploratorio y Modelo")
+    # Aquí puedes añadir más contenido para esta página
+
+    # Cargar el cuaderno Jupyter
+    nb_path = 'src/static/notebooks/modelo_tfm.ipynb'
+    with st.spinner('Cargando análisis exploratorio y Modelo...'):
+        # Cargar y mostrar el contenido pesado aquí
+        nb = cargar_cuaderno_jupyter(nb_path)
+
+        # Especificar el inicio y el final
+        num_celda_inicio = 1  # Ajusta este valor según sea necesario
+        num_celda_final = 33  # Ajusta este valor según sea necesario
+
+        # Mostrar el rango especificado de celdas del cuaderno en Streamlit
+        mostrar_cuaderno_jupyter(nb, num_celda_inicio)
+```
+
+
+La función mostrar_cuaderno_jupyter procesa las celda y según el tipo de contenido trata la información para adecuarla, como es el caso de las imagenes que requieren un deserilizado mediante la librería base64.
+```python
+def cargar_cuaderno_jupyter(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        return nbformat.read(f, as_version=4)
+
+def mostrar_cuaderno_jupyter(nb, num_celda_inicio=0, num_celda_final=None):
+    for i, cell in enumerate(nb.cells):
+        # Si se especificó un número de celda final y se alcanza, detener el bucle
+        if num_celda_final is not None and i > num_celda_final:
+            break
+        # Continuar si el índice de la celda actual aún no ha alcanzado el número de celda de inicio
+        if i < num_celda_inicio:
+            continue
+        
+        if cell.cell_type == 'markdown':
+            st.markdown(cell.source)
+        elif cell.cell_type == 'code':
+            st.code(cell.source, language='python')
+            for output in cell.outputs:
+                if output.output_type == 'execute_result' or output.output_type == 'display_data':
+                    if 'text/plain' in output.data:
+                        st.text(output.data['text/plain'])
+                    if 'image/png' in output.data:
+                        base64_img = output.data['image/png']
+                        img_bytes = base64.b64decode(base64_img)
+                        st.image(img_bytes, use_column_width=True)
+                    if 'text/html' in output.data:
+                        # Llamar a limpiar_html solo para contenido HTML
+                        cleaned_html = limpiar_html(output.data['text/html'])
+                        st.markdown(cleaned_html, unsafe_allow_html=True)
+                        # st.markdown(output.data['text/html'], unsafe_allow_html=True)
+                elif output.output_type == 'stream':
+                    st.text(output.text)
+                elif output.output_type == 'error':
+                    st.error('\n'.join(output.traceback))
+```
+
 
 
 
