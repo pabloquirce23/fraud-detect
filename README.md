@@ -17,21 +17,22 @@ Descripción y logo
 
 
 ## I. Justificación y descripción del proyecto
-La funcionalidad de FraudDetect es detectar si las transacciones bancarias que recibe mediante tablas de PDF son fraude o no, además de eso clasifica esas transacciones en diferentes agrupaciones en referencia al tipo de gasto que sean. Como añadido final le hemos integrado un chatbot desde cero.
-
-Para el entrenamiento de los modelos hemos utilizado un Dataset de Kaggle del cual podeis encontrar el enlace en el apartado de Bibliografía.
+Fraud Detect es una aplicación web diseñada para abordar de manera eficiente y precisa la detección de posibles fraudes bancarios.
+Su funcionalidad radica en la capacidad de procesar documentos en formato PDF, extrayendo las tablas contenidas en ellos mediante su lector integrado. A partir de los datos recopilados en estas tablas, la aplicación lleva a cabo un exhaustivo análisis para identificar posibles irregularidades financieras que puedan indicar la presencia de actividades fraudulentas entre una lista de clientes. También cuenta con una sucesión de gráficas con datos que pueden ser de utilidad para el usuario, además de un chatbot implementado desde cero para solucionar cualquier tipo de duda que pueda llegar a tener el usuario.
 
 
 ## II. Obtención de datos.
 
-Para obtener los datos que utilizaremos para entrenar nuestros modelos hemos decidido emplear un Dataset en el que tenemos información sobre transacciones bancarias. En él tratamos con las siguientes columnas:
+Los modelos se han entrenado con un conjunto de datos de Kaggle, cuyo enlace se puede consultar en la sección de Bibliografía.
 
-* **Time:** tiempo en segundos que pasaron desde la anterior transacción del Dataset.
-* **Columnas desde V1 a V28:** datos de un Análisis de Componentes Principales (técnica estadística utilizada para simplificar la complejidad de conjuntos de datos de grandes dimensiones) sometidos a una reducción para proteger la información personal de los clientes de la entidad bancaria.
-* **Amount:** Cantidad monetaria de la transacción bancaria.
-* **Class:** Muestra si la transacción bancaria es fraudulenta o no. 1 = Fraude y 0 = No es Fraude.
+El conjunto de datos contiene información sobre transacciones bancarias y se compone de las siguientes variables:
 
-En este fragmento de código podemos observar la carga de nuestro Dataset:
+* **Time:** Intervalo en segundos entre cada transacción y la transacción anterior del conjunto de datos.
+* **V1 a V28:** Resultado de aplicar un Análisis de Componentes Principales (una técnica estadística que reduce la dimensionalidad de los datos) a los datos originales, para preservar la privacidad de los clientes del banco.
+* **Amount:** Monto de la transacción en la moneda local.
+* **Class:** Indicador de si la transacción es fraudulenta o no. 1 = Fraude, 0 = No Fraude.
+
+El siguiente código muestra cómo se lee el conjunto de datos desde un archivo CSV:
 
 ```python
 ccdf = pd.read_csv('/content/creditcard.csv')
@@ -40,13 +41,13 @@ ccdf = pd.read_csv('/content/creditcard.csv')
 
 ## III. Limpieza de datos.
 
-Para la primera limpieza de datos sólo necesitamos eliminar los valores nulos existentes en el Dataset, para ello detectamos los valores nulos que hay en nuestro Dataframe:
+El primer paso en el procesamiento de datos implica la eliminación de valores nulos en el conjunto de datos. Identificamos los valores nulos en nuestro DataFrame con el siguiente código:
 
 ```python
 ccdf.isnull().sum()
 ```
 
-Eliminamos los nulos en las columnas en las que están:
+Posteriormente, eliminamos los valores nulos en las columnas correspondientes:
 
 ```python
 ccdf.dropna(subset=["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
@@ -55,7 +56,7 @@ ccdf.dropna(subset=["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
             inplace=True)
 ```
 
-Además de eso transformamos todos los valores que no son del tipado correcto a tipo float:
+Además, convertimos todos los valores que no son del tipo correcto a float:
 
 ```python
 ccdf['V22'] = ccdf['V22'].astype(float)
@@ -67,7 +68,7 @@ Para la exploración y visualización de los datos realizamos distintos procesos
 
 ![image](https://drive.google.com/uc?export=view&id=162MYEc4cYlY3vltdTicVb2qLRGr66tjA)
 
-Después realizamos una equilibración de Dataset para poder así ajustar la distribución de las clases y poder así representarlas de la misma manera. Esto lo hacemos porque en el Dataset que utilizamos nos hemos encontrado con un desequilibrio muy notable entre los casos de fraude y los casos de no fraude. Este tipo de desequilibrio puede sesgar enormemente los rendimientos de nuestro modelo de detección de fraude y de nuestro modelo de clusterización ya que cuando existe suele favorecer a la clase que más valores tiene. En este fragmento de código podemos apreciar un conteo del número de valores de cada clase:
+Para explorar y visualizar los datos, primero examinamos la estructura de nuestro DataFrame. Luego, equilibramos el conjunto de datos para ajustar la distribución de las clases y representarlas de manera equitativa. Esto es necesario debido al desequilibrio significativo entre los casos de fraude y no fraude en el conjunto de datos que estamos utilizando. Este desequilibrio puede sesgar considerablemente el rendimiento de nuestro modelo de detección de fraude y nuestro modelo de agrupación, ya que generalmente favorece a la clase con más valores. El siguiente fragmento de código muestra un recuento del número de valores de cada clase:
 
 ```python
 legit = ccdf[ccdf['Class']==0]
@@ -82,14 +83,14 @@ legit.shape()
 ccdf['Class'].value_counts()
 ```
 
-Aquí se puede ver el mapa de calor que hemos utilizado para observar las correlaciones existentes de nuestro Dataset:
+Finalmente, utilizamos un mapa de calor para observar las correlaciones existentes en nuestro conjunto de datos.
 
 ![image](https://drive.google.com/uc?export=view&id=1YQt_MKyK6rti9XPIiRBSzbiWJyoNubmq)
 
 
 ## V. Preparación de los datos para los algoritmos de Machine Learning.
 
-Ahora pasamos a la preparación de los datos con referencia al desarrollo y entrenamiento de nuestros modelos. Para ello vamos a observar los valores átipicos de cada columna de nuestro Dataset. Esto se ha realizado mediante el siguiente código:
+En esta etapa, preparamos los datos para el desarrollo y entrenamiento de nuestros modelos. Primero, identificamos los valores atípicos en cada columna de nuestro conjunto de datos utilizando el siguiente código:
 
 ```python
 # Lista de colores
@@ -114,11 +115,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-Y aquí podemos ver el resultado final:
+El resultado final se puede ver en la siguiente imagen:
 
 ![image](https://drive.google.com/uc?export=view&id=1fd_73OkFeu_cSfTSwWxs0Hee-xzxtsnE)
 
-Ahora pasamos al código con el que eliminamos los valores átipicos de las columnas de nuestro Dataset. En él se puede apreciar que hacemos una observación de varios factores relevantes para detectar correctamente estos valores. Observamos los límites del rango intercuartil (IQR), calculamos el rango (diferencia entre el percentil 75 y el percentil 25), el valor de corte (1,5 veces el IQR) y los límites inferiores y superiores:
+Posteriormente, eliminamos los valores atípicos en las columnas de nuestro conjunto de datos. Para ello, observamos los límites del rango intercuartil (IQR), calculamos el rango (diferencia entre el percentil 75 y el percentil 25), el valor de corte (1,5 veces el IQR) y los límites inferiores y superiores:
 
 ```python
 columnas = ['V'+str(i) for i in range(1, 29)]
@@ -146,7 +147,7 @@ for columna in columnas:
     print('-' * 333)
 ```
 
-Aquí pongo los resultados de todos estos factores de una de las columnas:
+Aquí se presentan los resultados de estos factores para una de las columnas:
 
 ```
 Quartile 25: -6.03606299434868 | Quartile 75: -0.419200076257679
@@ -159,15 +160,15 @@ V1 outliers:[-14.4744374924863, -15.3988450085358, -14.7246270119253, -15.271361
 Numero de ocurrencias despúes de eliminar outliers: 932
 ```
 
-Después volvemos a mostrar las mismas gráficas usadas anteriormente para ver como han desaparecido la mayoría de los valores atípicos:
+Una vez eliminados los valores atípicos, volvemos a visualizar las gráficas iniciales para confirmar que la mayoría de estos valores han sido eliminados.
 
 ![image](https://drive.google.com/uc?export=view&id=12ihVD2-DgZqIelbH4nLm4yQ8IZewRU9r)
 
-Ahora haciendo otra pequeña visualización al Dataset podemos observar que los datos están escalados de formas totalmente diferentes las unas de las otras:
+Posteriormente, realizamos una visualización adicional del conjunto de datos y observamos que los datos están escalados de manera diferente en cada columna.
 
 ![image](https://drive.google.com/uc?export=view&id=1cAFwWPJXPHd5xs_9D7wcKlfN7lxU3B0V)
 
-Debido a ello nos tocará estandarizar los datos:
+Para abordar este problema, es necesario estandarizar los datos. La estandarización es un proceso que transforma los datos para que tengan una media de cero y una desviación estándar de uno. Esto se realiza utilizando el siguiente código:
 
 ```python
 scaler = StandardScaler()
@@ -175,14 +176,12 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 ```
 
-Después de estos procesos aplicamos unas pocas transformaciones más y ya tendremos los datos listos para el desarrollo de nuestros modelos.
+Este proceso asegura que todas las columnas del conjunto de datos estén en la misma escala, lo cual es esencial para muchos algoritmos de aprendizaje automático. Con los datos ahora estandarizados, estamos listos para proceder con el desarrollo y entrenamiento de nuestros modelos de aprendizaje automático.
 
 
 ## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento.
 
-Pasamos a ver el desarrollo y entrenamiento de nuestro modelo de predicción para detectar fraude.
-
-Mediante la biblioteca Keras construimos y entrenamos una red convolucional 1D:
+En esta sección, nos enfocamos en el desarrollo y entrenamiento de nuestro modelo de predicción para la detección de fraude. Utilizamos la biblioteca Keras para construir y entrenar una red convolucional unidimensional (1D):
 
 ```python
 epochs = 15
@@ -207,7 +206,7 @@ model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', 
 history = model.fit(X_train, y_train,  epochs=epochs, validation_data=(X_test, y_test), verbose=1)
 ```
 
-Aquí podemos observar el rendimiento y la validación de nuestro modelo a medida que avanzan las épocas:
+A continuación, se muestra el rendimiento y la validación de nuestro modelo a medida que avanzan las épocas de entrenamiento:
 
 ```
 Epoch 1/15
@@ -242,7 +241,7 @@ Epoch 15/15
 5437/5437 [==============================] - 39s 7ms/step - loss: 0.0032 - accuracy: 0.9995 - val_loss: 0.0030 - val_accuracy: 0.9995
 ```
 
-Ahora desarrollamos una función para poder visualizar la precisión y la pérdida de nuestro modelo durante el entrenamiento y la validación a lo largo de las épocas:
+Ahora desarrollamos una función para visualizar la precisión y la pérdida de nuestro modelo durante el entrenamiento y la validación a lo largo de las épocas:
 
 ```python
 def plot_learning_curve(history, epoch):
@@ -266,9 +265,7 @@ def plot_learning_curve(history, epoch):
   plt.show()
 ```
 
-Como podéis observar en el resultado gráfico nos ayuda a observar los cambios de la precisión y pérdida del modelo a medida que se va entrendando a lo largo de las épocas. También de esta forma podemos observar si hay sobreajuste o subajuste.
-
-Si os fijais en torno al epoch 7 se puede apreciar un subajuste, esto tras varias pruebas entrenando el modelo con distintas combinaciones de capas se lo hemos achacado a la capa de tipo MaxPool1D. Esta capa es muy utilizada en entrenamientos de modelos de características similares y por ello hacemos el apunte.
+La gráfica resultante permite observar los cambios en la precisión y la pérdida del modelo a medida que se entrena a lo largo de las épocas. Esto también nos permite detectar si hay sobreajuste o subajuste. Por ejemplo, alrededor de la época 7, se puede apreciar un subajuste. Tras varias pruebas entrenando el modelo con distintas combinaciones de capas, hemos atribuido este subajuste a la capa de tipo MaxPool1D, que es comúnmente utilizada en entrenamientos de modelos con características similares.
 
 ```python
 plot_learning_curve(history, epochs)
@@ -276,7 +273,7 @@ plot_learning_curve(history, epochs)
 
 ![image](https://drive.google.com/uc?export=view&id=1VL9D6WcBqnWAFEng9oEXqlNy95xaSvQK)
 
-Aquí mostramos la estructura de capas final de nuestra red neuronal convolucional 1D:
+A continuación, presentamos la estructura final de capas de nuestra red neuronal convolucional 1D:
 
 ```python
 epochs = 15
@@ -296,7 +293,7 @@ model.add(Dropout(0.5))
 model.add(Dense(units=1, activation='sigmoid'))
 ```
 
-Aquí observamos un resumen de las características de nuestra red neuronal:
+A continuación, proporcionamos un resumen de las características de nuestra red neuronal:
 
 ```python
 model.summary()
@@ -336,7 +333,7 @@ Non-trainable params: 192 (768.00 Byte)
 _________________________________________________________________
 ```
 
-Y ahora vemos la progresión de nuestro modelo a medida que pasan las épocas:
+Tras realizar los ajustes necesarios en nuestro modelo, volvemos a visualizar la precisión y la pérdida durante el entrenamiento y la validación a lo largo de las épocas:
 
 ```python
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
@@ -376,7 +373,7 @@ Epoch 15/15
 5437/5437 [==============================] - 54s 10ms/step - loss: 0.0030 - accuracy: 0.9995 - val_loss: 0.0025 - val_accuracy: 0.9996
 ```
 
-Ahora si nos fijamos en la representación gráfica de nuevo podemos observar que ya no existe el ajuste que perjudicaba a la precisión de nuestro modelo:
+Al observar la representación gráfica, podemos confirmar que el ajuste que anteriormente perjudicaba la precisión de nuestro modelo ya no está presente.
 
 ```python
 plot_learning_curve(history, epochs)
@@ -384,9 +381,12 @@ plot_learning_curve(history, epochs)
 
 ![image](https://drive.google.com/uc?export=view&id=16sajE8s_rHvhw0lomre-TjooQp88xGAM)
 
+Esto indica que nuestro modelo ha mejorado y ahora es capaz de realizar predicciones con mayor precisión. La eliminación del ajuste es un indicativo de que nuestro modelo está bien ajustado y es capaz de generalizar bien a partir de los datos de entrenamiento. Esto es crucial para garantizar que nuestro modelo sea efectivo al detectar fraudes en transacciones no vistas previamente.
+
+
 ## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
 
-Pasamos ahora al modelo de clusterización que se encarga de agrupar los registros aportados y de atribuirles uno de los siguientes grupos:
+El siguiente paso es el modelado de clusterización, que agrupa los registros proporcionados en uno de los siguientes grupos:
 
 * 0: Desarrollo Personal (Personal Growth)
 * 1: Ocio (Leisure)
@@ -394,7 +394,7 @@ Pasamos ahora al modelo de clusterización que se encarga de agrupar los registr
 * 3: Préstamos (Loans)
 * 4: Inversiones (Investments)
 
-Para poder conseguir unas agrupaciones lógicas hemos creado un nuevo atributo llamado Median:
+Para lograr agrupaciones coherentes, hemos introducido un nuevo atributo, ‘Median’, calculado como la media de los valores de las columnas V1 a V28:
 
 ```python
 ccdf['Median'] = ccdf[["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10",
@@ -402,9 +402,9 @@ ccdf['Median'] = ccdf[["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V1
                        "V20", "V21", "V22", "V23", "V24", "V25", "V26", "V27", "V28"]].mean(axis=1)
 ```
 
-Hay infinidad de formas de identificar el número óptimo de clusteres, nosotros nos hemos decantado por el método Elbow que nos muestra una medida de como de bien ha agrupado el algoritmo de K-Means los clusters.
+Existen múltiples métodos para determinar el número óptimo de clusters. En nuestro caso, hemos optado por el método Elbow, que nos proporciona una medida de la eficacia de la agrupación realizada por el algoritmo K-Means.
 
-Ahora mostramos el código para apreciar el punto en el que el valor de agrupación es idóneo:
+A continuación, presentamos el código que nos permite identificar el número óptimo de clusters:
 
 ```python
 # Función para buscar el número óptimo de clusters
@@ -428,9 +428,7 @@ def optimizacion_cluster(data, max_clstr):
   plt.show()
 ```
 
-Aquí vemos la representación gráfica del código anterior.
-
-Viendo la gráfica observamos que la inercia (la suma de las distancias al centro del cluster más cercano elevada al cuadrado) decrece a medida que vamos aumentando el número de clusters. También podemos apreciar que auna gran equilibración a partir de la divisón de los 2 clusters en adelante.
+La gráfica resultante muestra cómo la inercia (la suma de las distancias al cuadrado al centro del cluster más cercano) disminuye a medida que aumentamos el número de clusters. Observamos un equilibrio a partir de la división en 2 clusters.
 
 ```python
 optimizacion_cluster(ccdf[["Median", "Amount"]], 20)
@@ -445,11 +443,7 @@ for i in range(1, 11):
   ccdf[f'KMeans_{i}'] = kmeans.labels_
 ```
 
-Ahora vamos a comparar gráficamente los distintos usos de KMeans (en base al número de clusters) para poder decidir con qué tipo de agrupación quedarnos.
-
-Ahora presentamos un código que lo que hace es aplicar el algoritmo 10 veces (número elegido fijándonos en la gráfica anterior ya que a partir de los 10 clusters se estabiliza la inercia) y añade una columna a nuestro Dataframe con la información de a qué grupo pertenece cada fila por cada aplicación del algoritmo. El objetivo de estas gráficas es facilitar el visionado de las distintas agrupaciones y poder así tomar una decisión acertada sobre el número de clusters que nos conviene seleccionar.
-
-En este caso, tras apreciar las distintas características que nos facilitan las gráficas, nos hemos decantado por aplicar un KMeans con 5 clusters.
+A continuación, aplicamos el algoritmo KMeans 10 veces (número seleccionado basándonos en la gráfica anterior, ya que la inercia se estabiliza a partir de los 10 clusters) y añadimos una columna a nuestro DataFrame con la información del grupo al que pertenece cada fila en cada aplicación del algoritmo.
 
 ```python
 fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(20,10))
@@ -459,9 +453,11 @@ for i, ax in enumerate(fig.axes, start=1):
   ax.set_title(f'Número Clusters: {i}')
 ```
 
+Finalmente, comparamos gráficamente los resultados de KMeans para diferentes números de clusters y decidimos quedarnos con una agrupación de 5 clusters.
+
 ![image](https://drive.google.com/uc?export=view&id=1kIDYR9hrX8Sy2ZRr_YXFJgsYYVigFO2x)
 
-Tras aplicar el código anterior nuestro Dataset ha quedado con varias columnas que no necesitaremos más por lo que las tumbamos y limpiamos así el Dataset.
+Después de aplicar el código anterior, nuestro conjunto de datos contiene varias columnas que ya no son necesarias. Por lo tanto, procedemos a eliminarlas para limpiar el conjunto de datos:
 
 ```python
 drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
@@ -471,7 +467,7 @@ drp_clmns = ['KMeans_1', 'KMeans_2', 'KMeans_3', 'KMeans_4',
 ccdf.drop(columns=drp_clmns, inplace=True)
 ```
 
-Aplicamos el algoritmo final con el número de clusters seleccionados con anterioridad.
+A continuación, implementamos el algoritmo final con el número de clusters que seleccionamos previamente.
 
 ```python
 kmeans = KMeans(n_clusters=5)
@@ -479,7 +475,7 @@ kmeans.fit(ccdf[['Median', 'Amount']])
 ccdf[f'KMeans_{5}'] = kmeans.labels_
 ```
 
-Así quedaría el Dataset:
+Este es el aspecto final del conjunto de datos después de la limpieza y la implementación del algoritmo de agrupación.
 
 ![image](https://drive.google.com/uc?export=view&id=1ITCax33yYYf_CHFsX-3Znsd6ziXY71Gl)
 
