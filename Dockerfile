@@ -1,14 +1,39 @@
 FROM python:3.10.12
-# FROM openjdk:11-jdk
+
+
+# RUN apt-get update 
+# RUN apt-get install -y openjdk-17-jdk
+
+# Instala Java
 RUN apt-get update 
 RUN apt-get install -y openjdk-17-jdk
-RUN pip install streamlit scikit-learn tensorflow tabulate matplotlib seaborn
-RUN pip install joblib==1.3.2
-RUN pip install openai==0.28
-RUN pip install tabula-py==2.2.0
-ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk
-COPY model/* /app/model/
-COPY src/* /app/
-COPY img/* /app/img/
+
 WORKDIR /app
-ENTRYPOINT [ "streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
+# Configura JAVA_HOME y añade el directorio bin de Java al PATH
+# ENV PATH $JAVA_HOME/bin:$PATH
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk
+
+# ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk
+
+# Instalar dependencias básicas primero
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+# RUN pip install  -r requirements.txt
+# RUN pip install --no-cache-dir streamlit
+
+# Luego instalar dependencias de desarrollo
+# COPY requirements_dev.txt /app/
+# RUN pip install --no-cache-dir -r requirements_dev.txt
+# Ahora copiamos el resto de los archivos
+COPY src/ /app/
+# COPY src/model/ /app/model/
+# COPY src/data/* /app/src/data/
+# # COPY image/* /app/image/
+# COPY src/model/* /app/model/
+# COPY src/components/* /app/components/
+# COPY src/static/* /app/static/
+
+EXPOSE 8501
+
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

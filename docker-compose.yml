@@ -1,9 +1,11 @@
 version: '3'
 
 services:
-    app:
-        build: .
-        environment:
-            - PORT=8501
-        ports:
-            - "8501:8501"
+  app:
+    build: .
+    environment:
+      - PORT=8501 # Para el acceso a los servicios de streamlit
+    volumes:
+      - "./src:/app"
+    ports:
+      - "8501:8501"

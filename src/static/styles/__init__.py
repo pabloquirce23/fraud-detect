@@ -1,0 +1,1 @@
+from .css_styles import FOOTER_STYLE
