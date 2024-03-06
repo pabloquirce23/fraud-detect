@@ -554,6 +554,7 @@ La aplicación web se ha hecho mediante el framework de Streamlit que está dise
 ### Estilo de la web
 
 La web se ha dividido en varios módulos, en el módulo inicial se encuentra el nombre de la aplicación junto con una descripción de esta, el apartado de carga de datos y generar predicción. Se ha escogido una gama de colores azulada ya que se busca algo que salga de la dualidad de páginas financieras en blanco y negro pero sin pisar la línea de lo informal porque al fin y al cabo es una aplicación dedicada a la búsqueda de posibles fraudes. A continuación dejo la configuración de los colores de la página.
+
 ![image](https://github.com/pabloquirce23/fraud-detect/assets/106399239/f28fbf8e-5e20-44e4-8fa1-3891b30b7285)
 
 
