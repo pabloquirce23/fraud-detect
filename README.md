@@ -1023,6 +1023,11 @@ FOOTER_STYLE = """
 
 ## IX. Conclusiones
 
+Con este proyecto hemos querido mostrar las posibilidades que ofrecen las tecnologías relacionadas con la IA. Aunque nosotros hemos usado un reducido grupo de herramientas como Streamlit, TensorFlow, Keras, Tabula, Matplotlib, Jupyter, OpenAI, el superar la dificultad de los problemas que iban apareciendo nos hacia ver que todo lo que habíamos aprendido a lo largo del Master ha sido de mucha utilidad.
+
+En particular, queremos destacar la contribución esencial de Pablo Santos, cuyo compromiso y dedicación fueron fundamentales para superar los retos más difíciles y llevar este proyecto a buen término. El esfuerzo invertido es el resultado final que colectivamente defendemos con orgullo.
+
+Concluimos agradeciendo al profesorado por su gran implicación en sus asignaturas, por las explicaciones en clase, tareas y trabajos en grupo que han hecho que lleguemos a este TFM con la mejor preparación posible.
 
 ## X. Bibliografía
 
