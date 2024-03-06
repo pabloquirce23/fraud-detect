@@ -614,7 +614,18 @@ df.replace(',', '.', regex=True, inplace=True): En esta parte se reemplazan toda
         df.replace(',', '.', regex=True, inplace=True)
         df = df.astype(float)
 ```
+A continuación se crea una lista llamada columnas_median que contienen todas las columnas del DataFrame `df` menos 'Time' y 'Amount' para posteriormente añadir una columna a `df` llamada Median que contiene la mediana creada a partir de `columnas_median`
 
+```python
+columnas_median = [c for c in columnas if c not in ['Time', 'Amount']] # Crea una variable de las columnas sin las columnas 'Time' y 'Amount'
+df['Median'] = df[columnas_median].mean(axis=1) # Crea una nueva columna en df con la mediana de columnas_median
+```
+Posteriormente almacena `df` y actualiza la referencia de `uploaded_files` 
+
+```python    
+st.session_state['df'] = df  # Almacena el DataFrame procesado en el estado de la sesión
+st.session_state['uploaded_files'] = uploaded_files  # Actualiza la referencia de archivos cargados
+```
 
 
 #### Predicción
