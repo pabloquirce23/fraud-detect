@@ -11,6 +11,32 @@
 
 [Alejandro Castillo](https://github.com/acscr44)
 
+## Indice
+
+[I. Justificación y descripción del proyecto](#i-justificación-y-descripción-del-proyecto)
+
+[II. Obtención de datos](#ii-obtención-de-datos)
+
+[III. Limpieza de datos](#iii-limpieza-de-datos)
+
+[IV. Exploración y visualización de los datos](#iv-exploración-y-visualización-de-los-datos)
+
+[V. Preparación de los datos para los algoritmos de Machine Learning](#v-preparación-de-los-datos-para-los-algoritmos-de-machine-learning)
+
+[VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento](#vii-entrenamiento-del-modelo-de-predicción-de-fraude-y-comprobación-de-su-rendimiento)
+
+[VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento](#viii-entrenamiento-del-modelo-de-clusterización-y-comprobación-de-su-rendimiento)
+
+[VII. PLN](#vii-pln)
+
+[VIII. Aplicación web](#viii-aplicación-web)
+
+[IX. Conclusiones](#ix-conclusiones)
+
+[X. Bibliografía](#x-bibliografía)
+
+
+
 
 ## Video
 
@@ -23,7 +49,7 @@ Fraud Detect es una aplicación web diseñada para abordar de manera eficiente y
 Su funcionalidad radica en la capacidad de procesar documentos en formato PDF, extrayendo las tablas contenidas en ellos mediante su lector integrado. A partir de los datos recopilados en estas tablas, la aplicación lleva a cabo un exhaustivo análisis para identificar posibles irregularidades financieras que puedan indicar la presencia de actividades fraudulentas entre una lista de clientes. También cuenta con una sucesión de gráficas con datos que pueden ser de utilidad para el usuario, además de un chatbot implementado desde cero para solucionar cualquier tipo de duda que pueda llegar a tener el usuario.
 
 
-## II. Obtención de datos.
+## II. Obtención de datos
 
 Los modelos se han entrenado con un conjunto de datos de Kaggle, cuyo enlace se puede consultar en la sección de Bibliografía.
 
@@ -90,7 +116,7 @@ Finalmente, utilizamos un mapa de calor para observar las correlaciones existent
 ![image](https://drive.google.com/uc?export=view&id=1YQt_MKyK6rti9XPIiRBSzbiWJyoNubmq)
 
 
-## V. Preparación de los datos para los algoritmos de Machine Learning.
+## V. Preparación de los datos para los algoritmos de Machine Learning
 
 En esta etapa, preparamos los datos para el desarrollo y entrenamiento de nuestros modelos. Primero, identificamos los valores atípicos en cada columna de nuestro conjunto de datos utilizando el siguiente código:
 
@@ -181,7 +207,7 @@ X_test = scaler.transform(X_test)
 Este proceso asegura que todas las columnas del conjunto de datos estén en la misma escala, lo cual es esencial para muchos algoritmos de aprendizaje automático. Con los datos ahora estandarizados, estamos listos para proceder con el desarrollo y entrenamiento de nuestros modelos de aprendizaje automático.
 
 
-## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento.
+## VI.I Entrenamiento del modelo de predicción de fraude y comprobación de su rendimiento
 
 En esta sección, nos enfocamos en el desarrollo y entrenamiento de nuestro modelo de predicción para la detección de fraude. Utilizamos la biblioteca Keras para construir y entrenar una red convolucional unidimensional (1D):
 
@@ -386,7 +412,7 @@ plot_learning_curve(history, epochs)
 Esto indica que nuestro modelo ha mejorado y ahora es capaz de realizar predicciones con mayor precisión. La eliminación del ajuste es un indicativo de que nuestro modelo está bien ajustado y es capaz de generalizar bien a partir de los datos de entrenamiento. Esto es crucial para garantizar que nuestro modelo sea efectivo al detectar fraudes en transacciones no vistas previamente.
 
 
-## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento.
+## VI.II Entrenamiento del modelo de clusterización y comprobación de su rendimiento
 
 El siguiente paso es el modelado de clusterización, que agrupa los registros proporcionados en uno de los siguientes grupos:
 
