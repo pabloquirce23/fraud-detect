@@ -32,24 +32,27 @@ def show_home_page():
     if uploaded_files and ('uploaded_files' not in st.session_state or uploaded_files != st.session_state.uploaded_files):
         df = pd.DataFrame(columns=columnas)  # Crear un nuevo DataFrame para los archivos cargados
         
-        for uploaded_file in uploaded_files:
+        for uploaded_file in uploaded_files: # Bucle para analizar archivo por archivo en los archivos subidos
             if uploaded_file is not None:
-                df_temp_list = tabula.read_pdf(uploaded_file, pages='all')
-                for df_temp in df_temp_list:
-                    if isinstance(df_temp, pd.DataFrame):
-                        if set(columnas).issubset(df_temp.columns):
-                            df = pd.concat([df, df_temp], ignore_index=True)
+                df_temp_list = tabula.read_pdf(uploaded_file, pages='all') # crea un array de posibles DataFrames con la lectura de las tablas del pdf
+                for df_temp in df_temp_list: # Bucle para analizar cada posible dataframe del arra df_temp_list
+                    if isinstance(df_temp, pd.DataFrame): # Comprueba si es un DataFrame
+                        if set(columnas).issubset(df_temp.columns): # Comprueba si el DataFrame  contiene las mismas columnas que el df donde se van a concatenar
+                            df = pd.concat([df, df_temp], ignore_index=True) # Concatena df_temp en df
                         else:
                             st.write(f"El archivo {uploaded_file.name} no tiene las columnas correctas.")
                     else:
                         st.write(f"El archivo {uploaded_file.name} no contiene ninguna tabla.")
-        
-        pd.set_option('future.no_silent_downcasting', True)
-        df.replace(',', '.', regex=True, inplace=True)
+
+        # Configura opción para evitar conversión silenciosa de tipos de datos.
+        pd.set_option('future.no_silent_downcasting', True) 
+        # Reemplaza comas con puntos en el DataFrame.
+        df.replace(',', '.', regex=True, inplace=True) 
+        # Convierte todas las columnas a tipo de datos 'float'.
         df = df.astype(float)
         
-        columnas_median = [c for c in columnas if c not in ['Time', 'Amount']]
-        df['Median'] = df[columnas_median].mean(axis=1)
+        columnas_median = [c for c in columnas if c not in ['Time', 'Amount']] # Crea una variable de las columnas sin las columnas 'Time' y 'Amount'
+        df['Median'] = df[columnas_median].mean(axis=1) # Crea una nueva columna en df con la mediana de columnas_median
         
         st.session_state['df'] = df  # Almacena el DataFrame procesado en el estado de la sesión
         st.session_state['uploaded_files'] = uploaded_files  # Actualiza la referencia de archivos cargados
