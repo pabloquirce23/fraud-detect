@@ -13,7 +13,7 @@
 
 ## Vídeo explicativo
 
-[Vídeo](https://www.youtube.com/watch?v=M3tULBVlnfQ)
+[Vídeo](https://youtu.be/OkS2Y9LFRgY)
 
 ## Presentación
 
