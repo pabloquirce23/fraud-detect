@@ -552,11 +552,70 @@ if prompt := st.chat_input("Escriba aquí su consulta"):
 
 La aplicación web se ha hecho mediante el framework de Streamlit que está diseñado para facilitar al desarrollador y al analista la creación de interfaces interactivas con el lenguaje Python. Los fuentes del proyecto están en este ![enlace](https://github.com/pabloquirce23/fraud-detect/tree/main/src).
 
-### Lógica de la aplicación
+### Estilo de la web
+
+La web se ha dividido en varios módulos, en el módulo inicial se encuentra el nombre de la aplicación junto con una descripción de esta, el apartado de carga de datos y generar predicción. Se ha escogido una gama de colores azulada ya que se busca algo que salga de la dualidad de páginas financieras en blanco y negro pero sin pisar la línea de lo informal porque al fin y al cabo es una aplicación dedicada a la búsqueda de posibles fraudes. A continuación dejo la configuración de los colores de la página.
+![image](https://github.com/pabloquirce23/fraud-detect/assets/106399239/f28fbf8e-5e20-44e4-8fa1-3891b30b7285)
+
+
 
 #### Inicio
 
-Aquí va la documentación de Pablo Oller (botón de carga de tablas PDF)
+Al cargarse la página de inicio, aparece el título con una pequeña descripción del proyecto
+
+![image](https://github.com/pabloquirce23/fraud-detect/assets/106399239/996e5088-7f97-4594-9475-97f5c4ecfa51)
+
+Seguidamente aparece el botón para cargar varios archivos PDFs con las tablas con las que el lector de PDF las extraerá de la manera:
+
+Primero se crea un array de las columnas que debe contener el DataFrame
+
+```python
+# definición de columnas del dataset
+columnas = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
+            'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
+            'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount']
+```
+
+Segundo se comprueba que se han subido uno o varios archivos (dependiendo de la necesidad del usuario) a la aplicación y se crea un Dataframe llamado `df` con las columnas del array homónimo mencionado antes para almacenar los datos de los archivos subidos
+
+```python
+# Inicializa df solo si hay nuevos archivos para procesar
+    if uploaded_files and ('uploaded_files' not in st.session_state or uploaded_files != st.session_state.uploaded_files):
+        df = pd.DataFrame(columns=columnas)  # Crear un nuevo DataFrame para los archivos cargados
+```
+
+Con un bucle se analiza cada archivo subido (`uploaded_file`), y comprobando si no es nulo, con la función `tabula.read_pdf(uploaded_file, pages='all')` se leen las tablas que haya en el archivo guardándose en la variable 
+`df_temp_list`.
+
+```python 
+        for uploaded_file in uploaded_files:
+            if uploaded_file is not None:
+                df_temp_list = tabula.read_pdf(uploaded_file, pages='all')
+```
+Dentro del bucle se crea un segundo para analizar todas las tablas almacenadas en `df_temp_list`, siendo su iterador `df_temp`. Si `df_temp` no es una instancia de un DataFrame, se imprimirá un mensaje por pantalla diciendo que el archivo no contiene ninguna tabla. Si entra en la condición se aplicará otra en la que se comprarará que `df_temp` tiene las mismas columnas que el DataFrame creado anteriormente llamado `df`. En caso positivo, `df_temp` se concatenará en este último DataFrame; en caso negativo se mostrará un mensaje diciendo que el archivo no tiene las columans correctas.
+
+```python
+                for df_temp in df_temp_list:
+                    if isinstance(df_temp, pd.DataFrame):
+                        if set(columnas).issubset(df_temp.columns):
+                            df = pd.concat([df, df_temp], ignore_index=True)
+                        else:
+                            st.write(f"El archivo {uploaded_file.name} no tiene las columnas correctas.")
+                    else:
+                        st.write(f"El archivo {uploaded_file.name} no contiene ninguna tabla.")
+
+```
+`pd.set_option('future.no_silent_downcasting', True)`: Aquí configura una opción para evitar la conversión de tipos de datos. En otras palabras, cuando se realiza una operación que podría cambiar el tipo de datos de una columna, Pandas normalmente realiza esta conversión sin generar una advertencia explícita. Al establecer esta opción en True, Pandas generará una advertencia si se produce una conversión silenciosa de tipos de datos
+
+df.replace(',', '.', regex=True, inplace=True): En esta parte se reemplazan todas las comas en el DataFrame df por puntos, para posteriormente convertir todos los datos a tipo float y poder trabajar correctamente con el DataFrame
+
+```python       
+        pd.set_option('future.no_silent_downcasting', True)
+        df.replace(',', '.', regex=True, inplace=True)
+        df = df.astype(float)
+```
+
+
 
 #### Predicción
 
