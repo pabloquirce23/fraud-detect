@@ -13,11 +13,11 @@
 
 ## Vídeo explicativo
 
-![Vídeo ]()
+![Vídeo](https://www.youtube.com/watch?v=M3tULBVlnfQ)
 
 ## Presentación
 
-![Presentación]()
+![Presentación](https://github.com/pabloquirce23/fraud-detect/blob/main/docs/TFM%20-%20FraudDetect.pdf)
 
 ## Indice
 
