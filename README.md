@@ -844,14 +844,7 @@ La posibilidad de aplicar un tema personalizado de Streamlit requiere del ficher
 ![image](https://drive.google.com/uc?export=view&id=1vQXWv0UFTwlJcjnCFz8h4-Vrvs0inS9M)<br>
 *custom_theme_config_toml*
 
-Estas especificaciones son las que nos ha permitido modificar los colores predeterminados de Streamlit y mejorar su apariencia.
-```
-[theme]
-primaryColor="#1d3557"
-backgroundColor="#457b9d"
-secondaryBackgroundColor="#003049"
-textColor="#f1faee"
-```
+Las especificaciones necesarias están descritas en el apartado [Estilo de la web](###-estilo-de-la-web).
 
 #### Pantalla de Análisis Exploratorio y Modelo
 
