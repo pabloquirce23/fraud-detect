@@ -549,6 +549,139 @@ if prompt := st.chat_input("Escriba aquí su consulta"):
 
 La aplicación web se ha hecho mediante el framework de Streamlit que está diseñado para facilitar al desarrollador y al analista la creación de interfaces interactivas con el lenguaje Python. Los fuentes del proyecto están en este ![enlace](https://github.com/pabloquirce23/fraud-detect/tree/main/src).
 
+### Lógica de la aplicación
+
+#### Inicio
+
+Aquí va la documentación de Pablo Oller (botón de carga de tablas PDF)
+
+#### Predicción
+
+En esta sección, la aplicación muestra los resultados de la predicción de fraude y la clusterización de las transacciones. Para ello, se visualiza el DataFrame generado por la función de lectura de tablas.
+
+![image](https://drive.google.com/uc?export=view&id=14eGh_eQZUqf1TJ0d340PT-eQY9Pw1T9H)
+
+A continuación, se detalla el proceso:
+
+Primero, se verifica si existe un DataFrame en el estado de la sesión de Streamlit y si no está vacío. En caso afirmativo, se accede al DataFrame.
+
+```python
+if 'df' in st.session_state and not st.session_state['df'].empty:
+  df = st.session_state['df']  # Acceso directo al DataFrame
+```
+
+Luego, se seleccionan las columnas ‘Median’ y ‘Amount’ del DataFrame para el modelo de clustering.
+
+```python
+df_clustering = df[['Median', 'Amount']]
+```
+
+Posteriormente, se convierte el DataFrame a un tensor para su uso con TensorFlow. Se seleccionan solo las columnas originales.
+
+```python
+df_tensor = tf.convert_to_tensor(df[columnas].values, dtype=tf.float32)  # Solo selecciona las columnas originales aquí
+```
+
+El DataFrame de clustering también se convierte a un tensor.
+
+```python
+df_clustering_tensor = tf.convert_to_tensor(df_clustering.values, dtype=tf.float32)
+```
+
+Si el DataFrame no está vacío, se aplica el modelo de predicción al tensor y se guarda el resultado en la columna ‘Class’ del DataFrame. Además, si el DataFrame no está vacío, también se aplica el modelo de clustering al tensor de clustering y se guarda en la columna ‘Cluster’ del DataFrame.
+
+```python
+if not df.empty:
+  df['Class'] = modelo.predict(df_tensor)
+  df['Cluster'] = modelo_clustering.predict(df_clustering_tensor)
+```
+
+Se crea un nuevo DataFrame para almacenar los resultados.
+
+```python
+results_df = pd.DataFrame(columns=["Detección Fraude", "Cluster"])
+```
+
+Finalmente, se recorre el DataFrame y se añaden los resultados al DataFrame de resultados.
+
+```python
+for i in range(len(df)):
+  new_row = pd.DataFrame({"Detección Fraude": ["NO FRAUDE ✅" if df['Class'][i] == 0 else "FRAUDE ❌"], 
+                          "Cluster": [cluster_labels[df['Cluster'][i]]]})
+  results_df = pd.concat([results_df, new_row], ignore_index=True)
+```
+
+##### Visualización de los resultados
+
+Para facilitar la exploración y análisis de los datos, se han generado diversas gráficas con enfoques distintos.
+
+La primera gráfica establece una relación entre las predicciones y los clusters.
+
+![image](https://drive.google.com/uc?export=view&id=1Lid5pahmiNy7jPYF091HFoxTCP_KfERw)
+
+Aquí mostramos el como funciona esta gráfica:
+
+Primero, se ordenan los clusters de menor a mayor y se mapean a las etiquetas preferidas.
+
+```python
+clusters = sorted(df['Cluster'].unique())
+cluster_labels_2 = {0: "PG", 1: "LS", 2: "BN", 3: "LN", 4: "IN"}
+```
+
+Se crea una gráfica circular para cada cluster, donde se calcula el porcentaje de fraude y no fraude. Los colores ‘darkblue’ y ‘lightblue’ representan ‘Fraude’ y ‘No Fraude’, respectivamente.
+
+```python
+fig, axs = plt.subplots(1, len(clusters), figsize=(10, 15))
+colors = ['darkblue', 'lightblue']
+```
+
+Para cada cluster, se filtra el DataFrame correspondiente, se cuentan los casos de fraude y se calculan los porcentajes. Luego, se crea la gráfica circular y se ajusta la posición del título y la leyenda de manera alternativa.
+
+```python
+for i, cluster in enumerate(clusters):
+    df_cluster = df[df['Cluster'] == cluster]
+    fraud_counts = df_cluster['Class'].value_counts()
+    not_fraud_percentage = fraud_counts.get(0, 0) / fraud_counts.sum() * 100
+    fraud_percentage = 100 - not_fraud_percentage
+    labels = [f'Fraud {fraud_percentage:.1f}%', f'Not Fraud {not_fraud_percentage:.1f}%']
+    axs[i].pie([fraud_percentage, not_fraud_percentage], startangle=90, colors = colors)
+    if i % 2 == 0:
+        axs[i].set_title(cluster_labels_2[cluster], y=1.1)
+        axs[i].legend(labels, loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=5)
+    else:
+        axs[i].set_title(cluster_labels_2[cluster], y=-0.1)
+        axs[i].legend(labels, loc='lower center', bbox_to_anchor=(0.5, 1.05), fancybox=True, shadow=True, ncol=5)
+```
+
+
+Como parte de los componentes gráficos que se presentan al realizar la predicción de los datos, esta gráfica es una de las disponibles en la página **Predicción** para la evaluación de la predicción. La segmentación por colores indica los distintos productos contratados por los clientes la entidad que suministra los datos.
+
+![image](https://drive.google.com/uc?export=view&id=1u0W_4uz_xYzgk5aYxAjFNwN87yCw1KIP)<br>
+*grafica_distribucion_scatter*
+
+```python
+# Crea un gráfico de dispersión para visualizar los clusters
+plt.figure(figsize=(10, 6))
+
+for cluster in df['Cluster'].unique():
+
+    # Filtra los datos por cluster
+    cluster_data = df[df['Cluster'] == cluster]
+
+    # Plotea los datos con un color diferente para cada cluster
+    plt.scatter(cluster_data['Median'], cluster_data['Amount'], label=f'{cluster_labels_2[cluster]}')
+
+plt.title('Distribución de Transacciones por Clusters')
+plt.xlabel('Mediana de V1-V28')
+plt.ylabel('Amount')
+plt.legend()
+st.pyplot(plt)
+```
+
+#### Eto'o Bot
+
+La descripción del rol del chatbot y la explicación de su funcionalidad se han expuesto en el apartado VII (Procesamiento del Lenguaje Natural).
+
 ### Lógica de la interfaz
 
 #### Menú Principal
@@ -629,32 +762,6 @@ def show_prediction_page():
         df = st.session_state['df']  # Acceso directo al DataFrame
 ```
 
-
-Como parte de los componentes gráficos que se presentan al realizar la predicción de los datos, esta gráfica es una de las disponibles en la página **Predicción** para la evaluación de la predicción. La segmentación por colores indica los distintos productos contratados por los clientes la entidad que suministra los datos.
-
-![image](https://drive.google.com/uc?export=view&id=1u0W_4uz_xYzgk5aYxAjFNwN87yCw1KIP)<br>
-*grafica_distribucion_scatter*
-
-
-
-```python
-# Crea un gráfico de dispersión para visualizar los clusters
-plt.figure(figsize=(10, 6))
-
-for cluster in df['Cluster'].unique():
-
-    # Filtra los datos por cluster
-    cluster_data = df[df['Cluster'] == cluster]
-
-    # Plotea los datos con un color diferente para cada cluster
-    plt.scatter(cluster_data['Median'], cluster_data['Amount'], label=f'{cluster_labels_2[cluster]}')
-
-plt.title('Distribución de Transacciones por Clusters')
-plt.xlabel('Mediana de V1-V28')
-plt.ylabel('Amount')
-plt.legend()
-st.pyplot(plt)
-```
 
 #### Tema de personalización
 
@@ -754,6 +861,8 @@ La función **show_etoobot_page** del fichero ![etoo_bot.py](https://github.com/
 elif st.session_state['page'] == 'Eto\'o Bot':
         show_etoobot_page()
 ```
+
+La descripción del rol del chatbot y la explicación de su funcionamiento se encuentran en el apartado VII.
 
 #### Módulo de Componentes
 
