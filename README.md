@@ -1,5 +1,6 @@
 # FraudDetect
 Descripción y logo
+El enlace a la aplicación está en la siguiente imagen si no funciona pulsa [aquí](https://fraud-detect-malbcmlk3h43xg2v5zyfuf.streamlit.app/)
 
 
 [<img src="https://github.com/pabloquirce23/fraud-detect/blob/main/tarjeta.png?raw=true" alt="LOGO_ENLACE_FRAUD_DETECT" width="200">](https://fraud-detect-malbcmlk3h43xg2v5zyfuf.streamlit.app/)
