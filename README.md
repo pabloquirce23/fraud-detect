@@ -7,9 +7,9 @@
 ## Créditos
 [Pablo Santos Quirce](https://github.com/pabloquirce23)
 
-[Pablo Oller Pérez](https://github.com/pabloquirce23)
+[Pablo Oller Pérez](https://github.com/PabloOller)
 
-[Alejandro Castillo](https://github.com/pabloquirce23)
+[Alejandro Castillo](https://github.com/acscr44)
 
 
 ## Video
