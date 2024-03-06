@@ -855,7 +855,7 @@ El aspecto de la página de Predicción muestra la información generada por los
 ![image](https://drive.google.com/uc?export=view&id=1KroUYNdk_FmDjdZ0atYPUcf2GcMze5k3)<br>
 *prediccion_basic_preview*
 
-La función show_prediction_page del fichero ![prediction_page.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/prediction_page.py) comprueba que ha recibido mediante st.session_state el dataframe importado desde la pantalla de inicio.
+La función show_prediction_page del fichero [prediction_page.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/prediction_page.py) comprueba que ha recibido mediante st.session_state el dataframe importado desde la pantalla de inicio.
 
 ```python
 def show_prediction_page():
@@ -887,7 +887,7 @@ En línea con los principios de la explicabilidad respecto a los sistemas de IA 
 ![image](https://drive.google.com/uc?export=view&id=1Gm3jWfyb7Lm-b-vxHndATrLWayGEJDOS)<br>
 *nbformat_jupyter_1*
 
-La función **show_analysis_page** del fichero ![pages.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/pages.py) invoca al método cargar_cuaderno_jupyter que lee el fichero .ipynb indicado en la ruta, y este invoca a su vez a mostrar_cuaderno_jupyter que realiza el procesado del notebook.
+La función **show_analysis_page** del fichero [pages.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/pages.py) invoca al método cargar_cuaderno_jupyter que lee el fichero .ipynb indicado en la ruta, y este invoca a su vez a mostrar_cuaderno_jupyter que realiza el procesado del notebook.
 ```python
 def show_analysis_page():
     # Titulo de la aplicación
@@ -954,7 +954,7 @@ def mostrar_cuaderno_jupyter(nb, num_celda_inicio=0, num_celda_final=None):
 ![image](https://drive.google.com/uc?export=view&id=11paefrcw7Kmol00uzPoTJjV-kfW87Nlo)<br>
 *etoo_bot_page*
 
-La función **show_etoobot_page** del fichero ![etoo_bot.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/etoo_bot.py) es llamada cuando el usuario selecciona desde la función main() de **app.py** el acceso a esta herramienta.
+La función **show_etoobot_page** del fichero [etoo_bot.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/etoo_bot.py) es llamada cuando el usuario selecciona desde la función main() de **app.py** el acceso a esta herramienta.
 
 ```python
 # Contenido de la página de Eto'o Bot
@@ -966,7 +966,7 @@ La descripción del rol del chatbot y la explicación de su funcionamiento se en
 
 #### Módulo de Componentes
 
-En ![components.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/components.py) se almacena todo el contenido HTML que es utilizado en la aplicación. Así se facilita la localización del código relacionado con el lenguaje de marcas.
+En [components.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/components.py) se almacena todo el contenido HTML que es utilizado en la aplicación. Así se facilita la localización del código relacionado con el lenguaje de marcas.
 ```python
 from static.styles.css_styles import *
 
@@ -1004,7 +1004,7 @@ def description():
 
 #### Módulo de Estilos
 
-En ![css_styles.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/css_styles.py) reune toda la colección de personalización CSS.
+En [css_styles.py](https://github.com/pabloquirce23/fraud-detect/blob/main/src/css_styles.py) reune toda la colección de personalización CSS.
 ```python
 FOOTER_STYLE = """
     <style>
@@ -1039,20 +1039,22 @@ Concluimos agradeciendo al profesorado por su gran implicación en sus asignatur
 
 ## X. Bibliografía
 
-![Dataset Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+[Dataset Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 
-![Red Neuronal para la detección de fraude](https://www.youtube.com/watch?v=wMEGqQcTlOk)
+[Red Neuronal para la detección de fraude](https://www.youtube.com/watch?v=wMEGqQcTlOk)
 
-![Outlier Detection](https://scikit-learn.org/stable/modules/outlier_detection.html)
+[Outlier Detection](https://scikit-learn.org/stable/modules/outlier_detection.html)
 
-![Clustering](https://www.youtube.com/watch?v=iNlZ3IU5Ffw)
+[Clustering](https://www.youtube.com/watch?v=iNlZ3IU5Ffw)
 
-![Error tabula / packages.txt](https://discuss.streamlit.io/t/error-with-tabula-py/46076)
+[Error tabula / packages.txt](https://discuss.streamlit.io/t/error-with-tabula-py/46076)
 
-![Visualización en Streamlit](https://docs.kanaries.net/topics/Streamlit/streamlit-visualization)
+[Visualización en Streamlit](https://docs.kanaries.net/topics/Streamlit/streamlit-visualization)
 
-![Chatbot en Streamlit](https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps)
+[Chatbot en Streamlit](https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps)
 
-![Carpeta Secrets Streamlit Cloud](https://docs.streamlit.io/streamlit-community-cloud/deploy-your-app/secrets-management)
+[Carpeta Secrets Streamlit Cloud](https://docs.streamlit.io/streamlit-community-cloud/deploy-your-app/secrets-management)
 
-![OpenAI Errors](https://platform.openai.com/docs/guides/error-codes/api-errors)
+[OpenAI Errors](https://platform.openai.com/docs/guides/error-codes/api-errors)
+
+[ChatGPT](https://chat.openai.com/)
