@@ -1,6 +1,8 @@
 # FraudDetect
 Descripción y logo
-[<img src="" alt="LOGO_ENLACE_FRAUD_DETECT" width="200">](https://fraud-detect-malbcmlk3h43xg2v5zyfuf.streamlit.app/)
+
+
+[<img src="https://github.com/pabloquirce23/fraud-detect/blob/main/tarjeta.png?raw=true" alt="LOGO_ENLACE_FRAUD_DETECT" width="200">](https://fraud-detect-malbcmlk3h43xg2v5zyfuf.streamlit.app/)
 
 ## Créditos
 [Pablo Santos Quirce](https://github.com/pabloquirce23)
