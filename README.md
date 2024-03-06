@@ -11,6 +11,14 @@
 
 [Alejandro Castillo](https://github.com/acscr44)
 
+## Vídeo explicativo
+
+![Vídeo ]()
+
+## Presentación
+
+![Presentación]()
+
 ## Indice
 
 [I. Justificación y descripción del proyecto](#i-justificación-y-descripción-del-proyecto)
@@ -1031,3 +1039,20 @@ Concluimos agradeciendo al profesorado por su gran implicación en sus asignatur
 
 ## X. Bibliografía
 
+![Dataset Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+
+![Red Neuronal para la detección de fraude](https://www.youtube.com/watch?v=wMEGqQcTlOk)
+
+![Outlier Detection](https://scikit-learn.org/stable/modules/outlier_detection.html)
+
+![Clustering](https://www.youtube.com/watch?v=iNlZ3IU5Ffw)
+
+![Error tabula / packages.txt](https://discuss.streamlit.io/t/error-with-tabula-py/46076)
+
+![Visualización en Streamlit](https://docs.kanaries.net/topics/Streamlit/streamlit-visualization)
+
+![Chatbot en Streamlit](https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps)
+
+![Carpeta Secrets Streamlit Cloud](https://docs.streamlit.io/streamlit-community-cloud/deploy-your-app/secrets-management)
+
+![OpenAI Errors](https://platform.openai.com/docs/guides/error-codes/api-errors)
